@@ -218,6 +218,8 @@ patient_3	1	12.0	gene_b
 patient_4	1	42.0	gene_c
 -----------------------------------------
 
+--------------------
 REFERENCES:
+--------------------
 if you use NoMAS, please cite: 
 Tommy Hansen and Fabio Vandin. Finding Mutated Subnetworks Associated with Survival Time in Cancer. RECOMB 2016
