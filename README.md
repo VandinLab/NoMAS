@@ -1,3 +1,5 @@
+Source code for NoMAS (Hansen and Vandin, RECOMB 2018)
+
 To compile the program, run the script
 ./compile.sh
 
