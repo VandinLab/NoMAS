@@ -1,4 +1,5 @@
 Source code for NoMAS (Hansen and Vandin, RECOMB 2018)
+--------------------
 
 To compile the program, run the script
 ./compile.sh
@@ -13,6 +14,7 @@ To run demos
 
 
 SIMPLE EXECUTION:
+--------------------
 
 Example 1:
 ./nomas.sh data path/to/dataset.txt network path/to/network.txt k 6
@@ -58,7 +60,7 @@ SNoMAS2:    Same as SNoMAS1, but can also combine with vertices not neighboring 
 
 
 The program can be run with a multitude of arguments, which are listed in the table below:
------------------------------------------------------------------------------------------
+
 parameter       Type/Range              Deafult         Description
 -----------------------------------------------------------------------------------------
 network         String                  hint+hi2012     Path of a gene interaction network file
@@ -129,6 +131,7 @@ algorithm                               NoMAS           Algorithm to use
                 GreedyK                                 -
                 GreedyDFS                               -
                 Exhaustive                              - Exhaustive enumeration of all subnetworks of size <= k
+
 -----------------------------------------------------------------------------------------
 In order to specify the value of one of the parameters above, type the name of the parameter followed by the desired value (separated by space)
 Example: ./nomas data datasets/lusc.txt k 5 func MIN_NLR
@@ -155,7 +158,7 @@ When a solution file is imported, any specified algorithm will be used ONLY for 
 That is, points 1) and 2) in the general program flow are skipped.
 Network and data files are ignored when a solution file is imported. The relevant network and dataset is deduced from the solution file.
 
----------------------
+
 SOLUTION FILE FORMAT
 ---------------------
 The solution file contains several information about the reported subnetworks. The columns are:
@@ -174,7 +177,7 @@ The last four lines of a solution file, contains data used to reconstruct the su
 NOTES:
 The algorithm Exhaustive outputs solutions to both MAX_NLR and MIN_NLR in the same file, by essentially concatenating the lists of identified solutions from both optimization problems.
 
---------------------
+
 NETWORK FILE FORMAT
 --------------------
 First line is the number <n> of genes in the network
@@ -193,9 +196,8 @@ Example:
 gene_a	1	2
 gene_b	2	1	3
 gene_c	3	2
----------------------
 
---------------------
+
 DATASET FILE FORMAT
 --------------------
 First line is the number <m> of patiens in the dataset
@@ -218,9 +220,9 @@ patient_1	1	2.0		gene_a
 patient_2	0	7.0		gene_a	gene_b
 patient_3	1	12.0	gene_b
 patient_4	1	42.0	gene_c
------------------------------------------
 
---------------------
+
+
 REFERENCES:
 --------------------
 if you use NoMAS, please cite: 
