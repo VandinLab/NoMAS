@@ -131,6 +131,23 @@ algorithm                               NoMAS           Algorithm to use
                 GreedyK                                 -
                 GreedyDFS                               -
                 Exhaustive                              - Exhaustive enumeration of all subnetworks of size <= k
+                
+ crossval       String                   -              Executes the NoMas in the special mode of cross-evaluation of the algorithm. The parameter is just a flag, 
+                                                        and has no need of any value. In cross-evaluation mode, the algorithm:
+                                                        - splits the dataset into two halves, a "training group" and a "control group"
+                                                        - performs the algorithm and computes the solution(s) on the training group
+                                                        - performs a p-value estimation based on a Monte Carlo method
+                                                        
+ samples        integer > 0             10000           Crossval mode only: number of Monte Carlo iterations for p-value estimation                                    
+                                                        
+ timeSplits     String                   -              Crossval mode only: determines how to split the dataset. The parameter is just a flag,
+                                                        and has no need of any value. When present, dataset is splitted in subgroups based on times, trying
+                                                        to obtain groups with an equal time distribution. When absent, dataset is splitted into equally sized
+                                                        groups, ignoring times.
+                                                        
+ splits         integer > 0             10              Crossval mode only: number of the subgroups to split the dataset
+ 
+ proportion     double > 0, < 1         0.5             Crossval mode only: proportion of the size of training group respect to control group
 
 -----------------------------------------------------------------------------------------
 In order to specify the value of one of the parameters above, type the name of the parameter followed by the desired value (separated by space)

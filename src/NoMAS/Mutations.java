@@ -3,6 +3,7 @@ import java.util.*;
 import java.io.*;
 
 public class Mutations {
+	
 	/**
 	 * Constructs mutation matrix and censoring information.
 	 */
@@ -55,6 +56,265 @@ public class Mutations {
 		
 		model.log.stream.println("[Mutation matrix] File name = "+model.matrix_file);
 		printInformation(model, "\t");
+	}
+	
+	/**
+	 * Constructs mutation matrixes and censoring informations for cross validation . Splits patients into two goups: train and control.
+	 */
+	public static void loadMutationMatrixes(String filename, Model train, Model control, boolean timesplits, int splits, double proportion) {
+		BufferedReader reader = Utils.bufferedReader(filename);
+		String line = Utils.readLine(reader);
+		int m = Integer.parseInt(line);
+		double[] times = new double[m];
+		
+		for(int i=0; i<m; i++) {
+			String[] parts = Utils.readLine(reader).split("\t");
+			times[i] = Double.parseDouble(parts[2]);	
+		}
+		
+		int[] indexes = sorter(times);
+		
+		double tempDouble;
+				
+		for (int i = 0; i < m; i++) {
+			int index = indexes[i];
+			if (times[index] != times[i]) {
+				tempDouble = times[i];
+				times[i] = times[index];
+				times[index] = tempDouble;
+			}
+		}
+		
+		Utils.close(reader);
+		
+		reader = Utils.bufferedReader(filename);
+		line = Utils.readLine(reader); //reset reader
+		
+		//code for determing the split of datasets
+		
+		double[] intervals = new double[m-1];
+		
+		for (int i = 0; i < intervals.length; i++) {
+			intervals[i] = Math.abs(times[i+1]-times[i]);			
+		}
+		
+		
+		int[] sizes = null;
+		
+		if (!timesplits) {
+			
+			//the distribution of times could be reasonably associated with an uniformly distributed variable
+			
+			sizes = new int[splits];
+			sizes[0] = m/splits;
+			for (int i = 1; i < sizes.length; i++) {
+				sizes[i] = sizes[0];
+			}
+			if (m%splits != 0) {
+				for (int i = 0; i < m%splits; i++) {
+					sizes[i]++;
+				}
+			}			
+		}
+		else {
+			
+			double distance = ((times[m-1] - times[0])/splits);
+			double threshhold = distance + times[0];
+			// I try to split the data into time-contiguous parts 
+			
+			int[] markers = new int[m];
+			markers[0] = 1;
+			int ct = 1;
+			int begin = 0;
+			double time = times[0];
+			for (int i = 1; i < m; i++) {
+				// if the actual subgroup has samples within the threshold
+				if (time + times[i] <= threshhold) {
+					//add the current element to the subgroup
+					markers[ct] = markers[ct-1];
+					time += times[i];
+					ct++;
+				}
+				else {
+					threshhold += distance;
+					//the element will be part of a new group
+					markers[ct] = markers[ct-1]+1;
+					begin = ct;
+					time = times[i];
+					ct++;
+				}
+				
+			}
+			//check markers and compose the sizes array
+			sizes = new int[markers[m-1]];
+			for (int i = 0; i < markers.length; i++) {
+				sizes[markers[i]-1]++;
+			}
+			
+			//check for spurious groups of size 1 and merges it with others close
+			ct = 0; // counter of spurious groups
+			for (int i = 0; i < sizes.length-1; i++) {
+				if (sizes[i] == 1) {
+					sizes[i] = 0;
+					sizes[i+1]++;
+				}
+			}
+			if (sizes[sizes.length-1] == 1) {
+				sizes[sizes.length-1] = 0;
+				sizes[sizes.length-2]++;
+			}
+			
+		}		
+		
+		//data split through indexes: define an array of 0/1 to define either if an entry belongs to training or control group
+		int[] group = new int[m];
+		
+		
+		
+		int ct = 0;
+		
+		//for each subgroup
+		for (int i = 0; i < sizes.length; i++) {
+			
+			// split it in two parts
+			int tr = (int) (sizes[i]*proportion);
+			int ctrl = sizes[i]-tr;
+
+			
+			//mark training
+			for (int j = 0; j < tr; j++) {
+				group[ct++] = 0; //training group
+			}
+			
+			//mark control
+			for (int j = 0; j < ctrl; j++) {
+				group[ct++] = 1; //control group
+			}
+			train.m = train.m+tr;
+			control.m = control.m+ctrl;
+		}
+		
+		//split the indexes array to keep both dataset ordered
+		int[] finalIndexes = new int[m];
+		
+		//expedient for code reuse
+		double[] tempInd = new double[m];
+		for (int i = 0; i < tempInd.length; i++) {
+			tempInd[i] = (double)indexes[i];
+		}
+		
+		int ctTr = 0;
+		int ctCtrl = 0;
+		int[] temp = sorter(tempInd);
+		for (int i = 0; i < group.length; i++) {
+			if (group[temp[i]] == 0) {
+				finalIndexes[indexes[temp[i]]] = ctTr;
+				ctTr++;
+			}
+			else {
+				finalIndexes[indexes[temp[i]]] = ctCtrl;
+				ctCtrl++;
+			}
+		}
+		
+		train.c = new int[train.m];
+		train.times = new double[train.m];
+		train.patient_ids = new String[train.m];
+		
+		control.c = new int[control.m];
+		control.times = new double[control.m];
+		control.patient_ids = new String[control.m];
+		
+				
+		HashMap<String, ArrayList<Gene>> mapTr = new HashMap<String, ArrayList<Gene>>();
+		for(int i=0; i<train.n; i++) {
+			train.genes[i].x = Bitstring.getEmpty(train.m);
+			
+			ArrayList<Gene> list = mapTr.get(train.genes[i].symbol);
+			if(list == null) {
+				list = new ArrayList<Gene>();
+				list.add(train.genes[i]);
+				mapTr.put(train.genes[i].symbol, list);
+			}else {
+				list.add(train.genes[i]);
+			}
+		}
+		
+		HashMap<String, ArrayList<Gene>> mapCtrl = new HashMap<String, ArrayList<Gene>>();
+		for(int i=0; i<control.n; i++) {
+			control.genes[i].x = Bitstring.getEmpty(control.m);
+			
+			ArrayList<Gene> list = mapCtrl.get(control.genes[i].symbol);
+			if(list == null) {
+				list = new ArrayList<Gene>();
+				list.add(control.genes[i]);
+				mapCtrl.put(control.genes[i].symbol, list);
+			}else {
+				list.add(control.genes[i]);
+			}
+		}
+		
+		// I now need to organize the indexes to insert all the data ordered by time
+		
+		
+		for(int i=0; i<m; i++) {
+			int index = indexes[i];
+			if (group[index] == 0) {
+				//to the training group
+				String[] parts = Utils.readLine(reader).split("\t");
+				train.patient_ids[finalIndexes[i]] = parts[0];
+				train.c[finalIndexes[i]] = Integer.parseInt(parts[1]);
+				train.times[finalIndexes[i]] = Double.parseDouble(parts[2]);
+				for(int j=3; j<parts.length; j++) {
+					ArrayList<Gene> list = mapTr.get(parts[j]);
+					if(list != null) {
+						for(Gene gene : list) {
+							Bitstring.setBit(gene.x, finalIndexes[i]);
+						}
+					}
+				}
+			}
+			else
+			{
+				//to the control group
+				String[] parts = Utils.readLine(reader).split("\t");
+				control.patient_ids[finalIndexes[i]] = parts[0];
+				control.c[finalIndexes[i]] = Integer.parseInt(parts[1]);
+				control.times[finalIndexes[i]] = Double.parseDouble(parts[2]);
+				for(int j=3; j<parts.length; j++) {
+					ArrayList<Gene> list = mapCtrl.get(parts[j]);
+					if(list != null) {
+						for(Gene gene : list) {
+							Bitstring.setBit(gene.x, finalIndexes[i]);
+						}
+					}
+				}				
+			}
+		}
+		
+		for(int i=0; i<train.n; i++) {
+			train.genes[i].m1 = Bitstring.numberOfSetBits(train.genes[i].x);
+		}
+		
+		for(int i=0; i<control.n; i++) {
+			control.genes[i].m1 = Bitstring.numberOfSetBits(control.genes[i].x);
+		}
+		
+		Utils.close(reader);
+		train.w = Censoring.computeWeights(train.c);
+		control.w = Censoring.computeWeights(control.c);
+		
+		train.norm_coef = Censoring.computeNormCoef(train.c);
+		control.norm_coef = Censoring.computeNormCoef(control.c);
+		
+		train.matrix_file = filename;
+		control.matrix_file = filename;
+		
+		train.log.stream.println("[Mutation matrix] File name = "+train.matrix_file);
+		printInformation(train, "\t");
+
+		control.log.stream.println("[Mutation matrix] File name = "+control.matrix_file);
+		printInformation(control, "\t");
 	}
 	
     /**
@@ -157,4 +417,46 @@ public class Mutations {
 			out.stream.println(model.patient_ids[i]+"\t"+model.times[i]+"\t"+model.c[i]+"\t"+mutated);
 		}
 	}
+	
+	/**
+	 * Sorts the patients and re-organizes the mutation matrix and survival data based on survival time of patients (from shortest to longest)
+	 */
+	private static int[] sorter (double[] times) {
+		
+		int[] indexes = new int[times.length];
+		
+		//need to convert to Double objs to quickly exploit standard library's sorting method 
+		Double [][] temp = new Double[times.length][2];
+		for(int i=0; i<times.length; i++) {
+			temp[i][1] = new Double(times[i]);
+			temp[i][0] = new Double((double)i);
+		}
+		mysort(temp);
+		
+		// re-conversion to int with truncation
+		
+		for(int i=0; i<times.length; i++) {
+			indexes[i] = (int) temp[i][0].doubleValue();
+		}
+		
+		return indexes;
+			
+	}
+	
+	
+	
+	/**
+	 * private method to sort data and track indexes
+	 */
+    private static Double[][] mysort(Double[][] ar) {
+        Arrays.sort(ar, new Comparator<Double[]>() {
+            @Override
+            public int compare(Double[] int1, Double[] int2) {
+            	Double numOfKeys1 = int1[1];
+            	Double numOfKeys2 = int2[1];
+                return numOfKeys1.compareTo(numOfKeys2);
+            }
+        });
+        return ar;
+    }
 }
