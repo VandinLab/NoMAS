@@ -18,6 +18,10 @@ public class Model {
 		log = new Output("Log.txt", false);
 	}
 	
+	public Model(String logname) {
+		log = new Output(logname+"Log.txt", false);
+	}
+	
 	public double normalizeLogrankStatistic(double lr, int m1) {
 		int m2 = m-m1;
 		double variance = norm_coef*((double)(m1*m2)/(double)(m*(m-1)));

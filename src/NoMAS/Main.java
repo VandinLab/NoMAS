@@ -21,7 +21,12 @@ public class Main {
 	             // Load models from file
 	             model = Model.fromSolutionsFile(import_file);
 	         }else {
-	             model = new Model();
+	        	 if((index = Utils.index(args, "output")) != -1) {
+	        		 model = new Model(args[index+1]);
+		            }
+	        	 else {
+	        		 model = new Model();
+	        	 	}
 	             // Load network file
 	             String graph_file = "networks/hint+hi2012.txt";
 	             if((index = Utils.index(args, "network")) != -1) {
@@ -172,9 +177,14 @@ public class Main {
 	        System.out.println("TO BE IMPLEMENTED");
 	        	
 	        }else {
-	        	train = new Model();
-	        	control = new Model();
-	        	
+	        	if((index = Utils.index(args, "output")) != -1) {
+	        		train = new Model(args[index+1]);
+	        		control = new Model(args[index+1]);
+		            }
+	        	 else {
+	        		train = new Model();
+	 	        	control = new Model();
+	        	 	}	        		        	
 	            // Load network file
 	            String graph_file = "networks/hint+hi2012.txt";
 	            if((index = Utils.index(args, "network")) != -1) {
@@ -259,8 +269,8 @@ public class Main {
 			//p-value estimate
 	
 			config.progress = false;
-			int samples = 100000; //default
-			if((index = Utils.index(args, "samples")) != -1) {
+			int samples = 10000; //default
+			if((index = Utils.index(args, "pvalue")) != -1) {
 				samples = Integer.parseInt(args[index+1]);
 			}
 			System.err.println("Estimating p-values, using Monte Carlo method. Samples = "+samples);
