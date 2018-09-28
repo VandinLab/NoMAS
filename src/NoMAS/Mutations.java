@@ -92,13 +92,6 @@ public class Mutations {
 		
 		//code for determing the split of datasets
 		
-		double[] intervals = new double[m-1];
-		
-		for (int i = 0; i < intervals.length; i++) {
-			intervals[i] = Math.abs(times[i+1]-times[i]);			
-		}
-		
-		
 		int[] sizes = null;
 		
 		if (!timesplits) {
@@ -119,28 +112,23 @@ public class Mutations {
 		else {
 			
 			double distance = ((times[m-1] - times[0])/splits);
-			double threshhold = distance + times[0];
+			double threshold = distance + times[0];
 			// I try to split the data into time-contiguous parts 
 			
 			int[] markers = new int[m];
 			markers[0] = 1;
 			int ct = 1;
-			int begin = 0;
-			double time = times[0];
 			for (int i = 1; i < m; i++) {
 				// if the actual subgroup has samples within the threshold
-				if (time + times[i] <= threshhold) {
+				if (times[i] <= threshold) {
 					//add the current element to the subgroup
 					markers[ct] = markers[ct-1];
-					time += times[i];
 					ct++;
 				}
 				else {
-					threshhold += distance;
+					threshold += distance;
 					//the element will be part of a new group
 					markers[ct] = markers[ct-1]+1;
-					begin = ct;
-					time = times[i];
 					ct++;
 				}
 				

@@ -56,6 +56,20 @@ public class Output {
 		stream.println("Reduction conditions\t"+model.reduction_conditions);
 	}
 	
+	public static void solutionsCrossVal(PrintStream stream, Model train, Model control, Solution... solutions) {
+		stream.println(Solution.HEADER);
+		for(Solution solution : solutions) {
+			if(solution != null) {
+				stream.println(solution.asString(train));
+			}
+		}
+		stream.println("");
+		stream.println("Graph file\t"+train.graph_file);
+		stream.println("Mutation matrix file\t"+train.matrix_file);
+		stream.println("Mutation removal threshold\t"+train.mutation_threshold);
+		stream.println("Reduction conditions\t"+train.reduction_conditions);
+	}
+	
 	public static void configuration(PrintStream stream, Configuration config) {
 		stream.println("N\t"+config.N);
 		stream.println("k\t"+config.k);
