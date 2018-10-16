@@ -55,7 +55,7 @@ public class Mutations {
 		model.matrix_file = filename;
 		
 		model.log.stream.println("[Mutation matrix] File name = "+model.matrix_file);
-		printInformation(model, "\t");
+		printCtrlInformation(model, "\t");
 	}
 	
 	/**
@@ -302,7 +302,7 @@ public class Mutations {
 		printInformation(train, "\t");
 
 		control.log.stream.println("[Mutation matrix] File name = "+control.matrix_file);
-		printInformation(control, "\t");
+		printCtrlInformation(control, "\t");
 	}
 	
     /**
@@ -389,6 +389,13 @@ public class Mutations {
 		model.log.stream.println(prefix+"Uncensored ratio: "+Utils.round(numberOfUncensored(model)/(double)model.m, 2));
 		model.log.stream.println(prefix+"Number of mutations: "+numberOfMutations(model));
 		model.log.stream.println(prefix+"Number of mutated genes: "+numberOfMutatedGenes(model));
+		model.log.stream.flush();
+	}
+	
+	public static void printCtrlInformation(Model model, String prefix) {
+		model.log.stream.println(prefix+"Number of control patients: "+model.m);
+		model.log.stream.println(prefix+"Number of mutations in control patients: "+numberOfMutations(model));
+		model.log.stream.println(prefix+"Number of mutated genes in control patients: "+numberOfMutatedGenes(model));
 		model.log.stream.flush();
 	}
 	

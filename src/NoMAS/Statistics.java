@@ -148,6 +148,9 @@ public class Statistics {
 									final Model model,
 									final int samples,
 									final int N) {
+		if (model.m == 0) {
+			return 1;
+		}
 		final int[] counts = new int[N];
 		Thread[] threads = new Thread[N];
 		for(int i=0; i<N; i++) {

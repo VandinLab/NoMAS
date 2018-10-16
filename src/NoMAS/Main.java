@@ -224,7 +224,7 @@ public class Main {
 	                threshold = Double.parseDouble(args[index+1]);
 	            }
 	            Mutations.removeMutations(train, threshold);
-	            Mutations.removeMutations(control, threshold);
+	            //Mutations.removeMutations(control, threshold);
 				// Remove mutations in genes to be ignored
 				if((index = Utils.index(args, "ignore")) != -1) {
 					Mutations.removeMutationsInGenes(train, args[index+1]);

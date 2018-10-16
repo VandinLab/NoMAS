@@ -137,9 +137,7 @@ algorithm                               NoMAS           Algorithm to use
                                                         - splits the dataset into two halves, a "training group" and a "control group"
                                                         - performs the algorithm and computes the solution(s) on the training group
                                                         - performs a p-value estimation based on a Monte Carlo method
-                                                        
- samples        integer > 0             10000           Crossval mode only: number of Monte Carlo iterations for p-value estimation                                    
-                                                        
+                                                                                                               
  timeSplits     String                   -              Crossval mode only: determines how to split the dataset. The parameter is just a flag,
                                                         and has no need of any value. When present, dataset is splitted in subgroups based on times, trying
                                                         to obtain groups with an equal time distribution. When absent, dataset is splitted into equally sized
