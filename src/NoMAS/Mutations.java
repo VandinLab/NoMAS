@@ -157,7 +157,9 @@ public class Mutations {
 		//data split through indexes: define an array of 0/1 to define either if an entry belongs to training or control group
 		int[] group = new int[m];
 		
-		
+		for (int i = 0; i < group.length; i++) {
+			group[i] = 1; //initiation: mark all elements as control
+		}
 		
 		int ct = 0;
 		
@@ -167,19 +169,29 @@ public class Mutations {
 			// split it in two parts
 			int tr = (int) (sizes[i]*proportion);
 			int ctrl = sizes[i]-tr;
-
+			
+			Stack s = new Stack<>();
+			
+			for (int j = 0; j<sizes[i]; j++) {
+				s.push(new Integer(j));
+			}
+			
+			Collections.shuffle(s);
 			
 			//mark training
 			for (int j = 0; j < tr; j++) {
-				group[ct++] = 0; //training group
+				group[ct+((Integer)s.pop()).intValue()] = 0; //training group with random pickup
 			}
+//			
+//			//mark control
+//			for (int j = 0; j < ctrl; j++) {
+//				group[ct++] = 1; //control group
+//			}
 			
-			//mark control
-			for (int j = 0; j < ctrl; j++) {
-				group[ct++] = 1; //control group
-			}
 			train.m = train.m+tr;
 			control.m = control.m+ctrl;
+			
+			ct = ct + sizes[i];
 		}
 		
 		//split the indexes array to keep both dataset ordered
