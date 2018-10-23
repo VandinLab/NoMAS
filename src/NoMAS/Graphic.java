@@ -38,6 +38,63 @@ public class Graphic {
 		}catch(Exception e) {}
 	}
 	
+	public static void renderCrossval(String filename, Model train, Model control, Solution[] solutions) {
+		int width = getWidth(control, solutions);
+		int height = getHeight(control, solutions);
+		BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+		Graphics2D g = (Graphics2D)img.getGraphics();
+		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g.setBackground(Color.WHITE);
+		g.clearRect(0, 0, width, height);
+		drawCrossval(g, width, train, control, solutions);
+		try {
+			ImageIO.write(img, "png", new File(filename+".png"));
+		}catch(Exception e) {}
+		}
+	
+	public static void drawCrossval(Graphics2D g, int width, Model train, Model control, Solution[] solutions) {
+		g.translate(GAP, GAP);
+		g.setColor(Color.BLACK);
+		drawHeader(g, train);
+		g.translate(350, 0);
+		drawLegend(g);
+		g.translate(-350, HEADER_HEIGHT);
+		g.setFont(new Font("TimesRoman", Font.PLAIN, 16));
+		for(Solution s : solutions) {
+			g.translate(0, GAP);
+			int height = SOLUTION_WIDTH + (s.vertices.size()+2)*MATRIX_CELL + GAP;
+			g.drawRect(0, 0, width-(2*GAP), height+2*GAP);
+			drawSolutionCrossVal(g, train, control, s);
+			g.translate(0, height+GAP);
+		}
+		
+	}
+
+	public static void drawSolutionCrossVal(Graphics2D g, Model train, Model control, Solution solution) {
+		double[] contributions = Solution.contributions(train, solution); 
+		AffineTransform state = g.getTransform();
+		g.translate(GAP, GAP);
+		drawSummaryCrossval(g, solution);
+		g.translate(LABEL_WIDTH, 0);
+		drawNetwork(g, train, solution, contributions);
+		g.translate(SOLUTION_WIDTH+GAP, 0);
+		drawLabels(g, train, solution, contributions);
+		g.translate(-SOLUTION_WIDTH-GAP-LABEL_WIDTH, SOLUTION_WIDTH+GAP);
+		drawMatrix(g, control, solution);
+		g.setTransform(state);
+	}
+	
+	public static void drawSummaryCrossval(Graphics2D g, Solution solution) {
+		AffineTransform state = g.getTransform();
+		FontMetrics metrics = g.getFontMetrics(g.getFont());
+		int font_height = metrics.getHeight();
+		g.translate(0, font_height/2);
+		g.drawString("Log-rank: "+Utils.round(solution.lr, 4), 0, 0);
+		g.drawString("Norm. log-rank: "+Utils.round(solution.nlr, 4), 0, font_height);
+		g.drawString("p-value: "+solution.pv, 0, 2*font_height);
+		g.setTransform(state);
+	}
+
 	public static int getHeight(Model model, Solution... solutions) {
 		int height = 3*GAP + HEADER_HEIGHT;
 		for(Solution s : solutions) {
@@ -228,4 +285,6 @@ public class Graphic {
 		g.setColor(Color.BLACK);
 		g.setTransform(state);
 	}
+
+	
 }

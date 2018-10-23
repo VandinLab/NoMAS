@@ -291,7 +291,7 @@ public class Main {
 			Output.solutions(out.stream, train, solutions);
 	        out.stream.flush();
 	        out.stream.close();
-	        Graphic.render(outname, train, solutions);
+	        Graphic.renderCrossval(outname, train, control, solutions);
 	        
 	        // Output mutation/survival information
 			if((index = Utils.index(args, "mutinfo")) != -1) {
