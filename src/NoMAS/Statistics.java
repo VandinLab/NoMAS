@@ -200,11 +200,19 @@ public class Statistics {
 	 * @param samples The number of samples for the p-value estimate
 	 * @param solutions The list of solutions
 	 * @param N The number of threads to use
+	 * @param crossval Flag to determine if in crossval mode
 	 */
-	public static void pvalue(Model model, int samples, int N, Solution... solutions) {
-		for(Solution solution : solutions) {
-			solution.pv = pvalue(solution.lr, solution.m1, model, samples, N);
+	public static void pvalue(Model model, int samples, int N, boolean crossval, Solution... solutions) {
+		if (crossval) {
+			for(Solution solution : solutions) {
+				solution.pv = pvalue(solution.lr, solution.m1, model, samples, N);
+			}
+		} else {
+			for(Solution solution : solutions) {
+				solution.pcv = pvalue(solution.lr, solution.m1, model, samples, N);
+			}
 		}
+		
 	}
 	
 	/**

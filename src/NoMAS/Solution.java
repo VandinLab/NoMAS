@@ -1,13 +1,13 @@
 package NoMAS;
 import java.util.*;
 
-public class Solution {
+public class Solution{
 	public static final String HEADER =
 	"Mutation count\tlog-rank\tnormalized log-rank\tp-value\tpermutation p-value\tsingle-gene score";
 	
 	public int[] x;
 	public int m1;
-	public double lr, nlr, pv, ppv, score;
+	public double lr, nlr, pv, pcv, ppv, score;
 	public ArrayList<Vertex> vertices;
 	public Solution next;
 	

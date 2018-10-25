@@ -60,11 +60,11 @@ public class Graphic {
 		drawLegend(g);
 		g.translate(-350, HEADER_HEIGHT);
 		g.setFont(new Font("TimesRoman", Font.PLAIN, 16));
-		for(Solution s : solutions) {
+		for(int i = 0; i < solutions.length; i++) {
 			g.translate(0, GAP);
-			int height = SOLUTION_WIDTH + (s.vertices.size()+2)*MATRIX_CELL + GAP;
+			int height = SOLUTION_WIDTH + (solutions[i].vertices.size()+2)*MATRIX_CELL + GAP;
 			g.drawRect(0, 0, width-(2*GAP), height+2*GAP);
-			drawSolutionCrossVal(g, train, control, s);
+			drawSolutionCrossVal(g, train, control, solutions[i]);
 			g.translate(0, height+GAP);
 		}
 		
@@ -91,7 +91,8 @@ public class Graphic {
 		g.translate(0, font_height/2);
 		g.drawString("Log-rank: "+Utils.round(solution.lr, 4), 0, 0);
 		g.drawString("Norm. log-rank: "+Utils.round(solution.nlr, 4), 0, font_height);
-		g.drawString("p-value: "+solution.pv, 0, 2*font_height);
+		g.drawString("p-value train: "+solution.pv, 0, 2*font_height);
+		g.drawString("p-value control: "+solution.pcv, 0, 3*font_height);
 		g.setTransform(state);
 	}
 

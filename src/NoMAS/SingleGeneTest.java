@@ -21,7 +21,7 @@ public class SingleGeneTest {
 		Output out = new Output("pvalue_"+data+".txt", false);
 		out.stream.println("module\tpvalue\tnorm.logrank\tm1");
 		for(Solution solution : genes) {
-			Statistics.pvalue(model, samples, N, solution);
+			Statistics.pvalue(model, samples, N, false, solution);
 			out.stream.println(solution.vertices.get(0).gene.symbol+"\t"+solution.pv+"\t"+solution.nlr+"\t"+solution.vertices.get(0).gene.m1);
 			out.stream.flush();
 		}
@@ -56,7 +56,7 @@ public class SingleGeneTest {
 			solution.computePopulationVector(model);
 			solution.computeLogrankStatistic(model);
 			
-			Statistics.pvalue(model, samples, N, solution);
+			Statistics.pvalue(model, samples, N, false, solution);
 			
 			double ratio = Utils.round(((double)solution.m1/model.m), 2);
 			out.stream.println(Bitstring.asString(bitset, 10)+"\t"+solution.pv+"\t"+solution.nlr+"\t"+solution.m1+"\t"+ratio);

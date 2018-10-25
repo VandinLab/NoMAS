@@ -120,7 +120,7 @@ public class Main {
 	 			config.progress = false;
 	 			int samples = Integer.parseInt(args[index+1]);
 	 			System.err.println("Estimating p-values, using Monte Carlo method. Samples = "+samples);
-	 			Statistics.pvalue(model, samples, config.N, solutions);
+	 			Statistics.pvalue(model, samples, config.N, false, solutions);
 	 			System.err.println("Done.");
 	 		}
 	 		
@@ -205,7 +205,13 @@ public class Main {
 	            	timesplits = true;
 	            }else{
 	            	timesplits = false;
-	            }	            
+	            }
+	            
+	            long seed = System.currentTimeMillis(); //seed for the random choice of groups
+	            
+	            if((index = Utils.index(args, "seed")) != -1) {
+	            	seed = Long.parseLong(args[index+1]);
+	            }
 	            
 	            int splits = 10; //default value
 	            if((index = Utils.index(args, "splits")) != -1) {
@@ -216,7 +222,7 @@ public class Main {
 	            if((index = Utils.index(args, "proportion")) != -1) {
 	            	proportion = Double.parseDouble(args[index+1]);
 	            }
-	            Mutations.loadMutationMatrixes(dataset_file, train, control, timesplits, splits, proportion);
+	            Mutations.loadMutationMatrixes(dataset_file, train, control, timesplits, splits, proportion, seed);
 	            	            
 	            // Remove mutations
 	            double threshold = 3.0;
@@ -257,14 +263,14 @@ public class Main {
 			
 			// FIND SOLUTIONS
 	        Solution[] solutions = null;
-	        if(import_file != null) {
+ 	        if(import_file != null) {
 	            solutions = SolutionList.fromFile(train, import_file);
 	        }else {
 	            config.progress = true;
 	            System.err.println("Solving Max k-set Log-rank.");
 	            solutions = algorithm.run();
 	            System.err.println("Done. Time elapsed: "+algorithm.timeElapsed());
-	        }
+	        } 
 			
 			//p-value estimate
 	
@@ -274,7 +280,8 @@ public class Main {
 				samples = Integer.parseInt(args[index+1]);
 			}
 			System.err.println("Estimating p-values, using Monte Carlo method. Samples = "+samples);
-			Statistics.pvalue(control, samples, config.N, solutions);
+			Statistics.pvalue(control, samples, config.N, false, solutions);
+			Statistics.pvalue(train, samples, config.N, true, solutions);
 			System.err.println("Done.");
 	
 	        // Output

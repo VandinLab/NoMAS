@@ -61,7 +61,7 @@ public class Mutations {
 	/**
 	 * Constructs mutation matrixes and censoring informations for cross validation . Splits patients into two goups: train and control.
 	 */
-	public static void loadMutationMatrixes(String filename, Model train, Model control, boolean timesplits, int splits, double proportion) {
+	public static void loadMutationMatrixes(String filename, Model train, Model control, boolean timesplits, int splits, double proportion, long seed) {
 		BufferedReader reader = Utils.bufferedReader(filename);
 		String line = Utils.readLine(reader);
 		int m = Integer.parseInt(line);
@@ -161,6 +161,13 @@ public class Mutations {
 			group[i] = 1; //initiation: mark all elements as control
 		}
 		
+		Random generator = new Random(seed);
+		long[] seeds = new long[sizes.length];
+		
+		for (int i = 0; i < sizes.length; i++) {
+			seeds[i] = generator.nextLong();
+		}
+		
 		int ct = 0;
 		
 		//for each subgroup
@@ -170,13 +177,13 @@ public class Mutations {
 			int tr = (int) (sizes[i]*proportion);
 			int ctrl = sizes[i]-tr;
 			
-			Stack s = new Stack<>();
+			Stack<Integer> s = new Stack<>();
 			
 			for (int j = 0; j<sizes[i]; j++) {
 				s.push(new Integer(j));
 			}
 			
-			Collections.shuffle(s);
+			Collections.shuffle(s, new Random(seeds[i]));
 			
 			//mark training
 			for (int j = 0; j < tr; j++) {
