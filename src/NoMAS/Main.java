@@ -280,8 +280,8 @@ public class Main {
 				samples = Integer.parseInt(args[index+1]);
 			}
 			System.err.println("Estimating p-values, using Monte Carlo method. Samples = "+samples);
-			Statistics.pvalue(control, samples, config.N, false, solutions);
-			Statistics.pvalue(train, samples, config.N, true, solutions);
+			Statistics.pvalue(control, samples, config.N, true, solutions);
+			Statistics.pvalue(train, samples, config.N, false, solutions);
 			System.err.println("Done.");
 	
 	        // Output

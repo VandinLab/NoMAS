@@ -205,11 +205,11 @@ public class Statistics {
 	public static void pvalue(Model model, int samples, int N, boolean crossval, Solution... solutions) {
 		if (crossval) {
 			for(Solution solution : solutions) {
-				solution.pv = pvalue(solution.lr, solution.m1, model, samples, N);
+				solution.pcv = pvalue(solution.lr, solution.m1, model, samples, N);
 			}
 		} else {
 			for(Solution solution : solutions) {
-				solution.pcv = pvalue(solution.lr, solution.m1, model, samples, N);
+				solution.pv = pvalue(solution.lr, solution.m1, model, samples, N);
 			}
 		}
 		

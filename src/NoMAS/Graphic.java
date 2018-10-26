@@ -91,8 +91,8 @@ public class Graphic {
 		g.translate(0, font_height/2);
 		g.drawString("Log-rank: "+Utils.round(solution.lr, 4), 0, 0);
 		g.drawString("Norm. log-rank: "+Utils.round(solution.nlr, 4), 0, font_height);
-		g.drawString("p-value train: "+solution.pv, 0, 2*font_height);
-		g.drawString("p-value control: "+solution.pcv, 0, 3*font_height);
+		g.drawString("p-value tr: "+solution.pv, 0, 2*font_height);
+		g.drawString("p-value ctrl: "+solution.pcv, 0, 3*font_height);
 		g.setTransform(state);
 	}
 
