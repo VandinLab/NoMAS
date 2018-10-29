@@ -5,6 +5,7 @@ public class Configuration {
 	public boolean timing = false;
 	public boolean progress = false;
 	public boolean uniqueness = false;
+	public boolean crossval = false;
 	public int N = 4;
 	public int k = 5;
 	public int kprime = 3;

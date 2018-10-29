@@ -67,6 +67,13 @@ public class SolutionList {
 		}
 	}
 	
+	public static void computeLogrankCrossval(Model model, Solution... solutions) {
+		for(Solution solution : solutions) {
+			solution.computePopulationVectorCrossval(model);
+			solution.computeLogrankStatisticCrossval(model);
+		}
+	}
+	
 	public static Solution[] merge(int size, Objective objective, Solution[]... lists) {
 		Solution[] solutions = new Solution[size];
 		for(Solution[] list : lists) {

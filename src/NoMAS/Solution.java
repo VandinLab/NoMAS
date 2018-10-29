@@ -5,9 +5,9 @@ public class Solution{
 	public static final String HEADER =
 	"Mutation count\tlog-rank\tnormalized log-rank\tp-value\tpermutation p-value\tsingle-gene score";
 	
-	public int[] x;
-	public int m1;
-	public double lr, nlr, pv, pcv, ppv, score;
+	public int[] x, xcv;
+	public int m1, m1cv;
+	public double lr, lrcv, nlr, pv, pcv, ppv, score;
 	public ArrayList<Vertex> vertices;
 	public Solution next;
 	
@@ -22,6 +22,7 @@ public class Solution{
 		computeLogrankStatistic(model);
 	}
 
+	
 	public Solution(Vertex v, double score, Model model) {
 		this();
 		vertices.add(v);
@@ -32,6 +33,10 @@ public class Solution{
 	public void computeLogrankStatistic(Model model) {
 		Bitstring.logrankAndCount(this, model.w);
 		nlr = model.normalizeLogrankStatistic(lr, m1);
+	}
+	
+	public void computeLogrankStatisticCrossval(Model model) {
+		Bitstring.logrankAndCountCrossval(this, model.w);		
 	}
 	
 	public String asString(Model model) {
@@ -48,6 +53,15 @@ public class Solution{
 			x = Bitstring.logicalOR(x, v.gene.x);
 		}
 		m1 = Bitstring.numberOfSetBits(x);
+	}
+	
+	public void computePopulationVectorCrossval(Model model) {
+		xcv = Bitstring.getEmpty(model.m);
+		for(Vertex v : vertices) {
+			Vertex vc = Graph.getVertexBySymbol(model, v.gene.symbol);
+			xcv = Bitstring.logicalOR(xcv, vc.gene.x);
+		}
+		m1cv = Bitstring.numberOfSetBits(xcv);
 	}
 	
 	public void computePopulationVector(int m) {

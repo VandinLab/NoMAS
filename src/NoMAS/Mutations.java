@@ -233,15 +233,15 @@ public class Mutations {
 		control.patient_ids = new String[control.m];
 		
 				
-		HashMap<String, ArrayList<Gene>> mapTr = new HashMap<String, ArrayList<Gene>>();
+		HashMap<String, ArrayList<Gene>> map = new HashMap<String, ArrayList<Gene>>();
 		for(int i=0; i<train.n; i++) {
 			train.genes[i].x = Bitstring.getEmpty(train.m);
 			
-			ArrayList<Gene> list = mapTr.get(train.genes[i].symbol);
+			ArrayList<Gene> list = map.get(train.genes[i].symbol);
 			if(list == null) {
 				list = new ArrayList<Gene>();
 				list.add(train.genes[i]);
-				mapTr.put(train.genes[i].symbol, list);
+				map.put(train.genes[i].symbol, list);
 			}else {
 				list.add(train.genes[i]);
 			}
@@ -260,7 +260,7 @@ public class Mutations {
 				list.add(control.genes[i]);
 			}
 		}
-		
+//		
 		// I now need to organize the indexes to insert all the data ordered by time
 		
 		
@@ -273,7 +273,7 @@ public class Mutations {
 				train.c[finalIndexes[i]] = Integer.parseInt(parts[1]);
 				train.times[finalIndexes[i]] = Double.parseDouble(parts[2]);
 				for(int j=3; j<parts.length; j++) {
-					ArrayList<Gene> list = mapTr.get(parts[j]);
+					ArrayList<Gene> list = map.get(parts[j]);
 					if(list != null) {
 						for(Gene gene : list) {
 							Bitstring.setBit(gene.x, finalIndexes[i]);

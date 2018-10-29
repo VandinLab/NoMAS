@@ -54,6 +54,23 @@ public class Bitstring {
 		return dp;
 	}
 	
+	public static final void logrankAndCountCrossval(Solution solution, double[] w) {
+		solution.m1cv = 0;
+		int[] X = solution.xcv;
+		double dp = 0.0;
+		for(int i=0; i<X.length; i++) {
+			int x = X[i];
+			int index = i*31;
+			while(x != 0) {
+				int pos = Mod37BitPosition[(x&-x)%37]; // Isolate rightmost and look up
+				x = x & (x-1); // Clear rightmost
+				dp += w[index+pos];
+				solution.m1cv++;
+			}
+		}
+		solution.lrcv = dp;
+	}
+	
 	public static final void logrankAndCount(Solution solution, double[] w) {
 		solution.m1 = 0;
 		int[] X = solution.x;

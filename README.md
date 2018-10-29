@@ -147,7 +147,7 @@ algorithm                               NoMAS           Algorithm to use
  
  proportion     double > 0, < 1         0.5             Crossval mode only: proportion of the size of training group respect to control group
  
- seed			number (integer			 - 				Crossval mode only: seed for randomization of groups splitting (for results reproducibility)
+ randseed		number (integer			 - 				Crossval mode only: seed for randomization of groups splitting (for results reproducibility)
 				or long)
 
 -----------------------------------------------------------------------------------------

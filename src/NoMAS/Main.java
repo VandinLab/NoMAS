@@ -209,7 +209,7 @@ public class Main {
 	            
 	            long seed = System.currentTimeMillis(); //seed for the random choice of groups
 	            
-	            if((index = Utils.index(args, "seed")) != -1) {
+	            if((index = Utils.index(args, "randseed")) != -1) {
 	            	seed = Long.parseLong(args[index+1]);
 	            }
 	            
@@ -234,7 +234,7 @@ public class Main {
 				// Remove mutations in genes to be ignored
 				if((index = Utils.index(args, "ignore")) != -1) {
 					Mutations.removeMutationsInGenes(train, args[index+1]);
-					Mutations.removeMutationsInGenes(control, args[index+1]);
+//					Mutations.removeMutationsInGenes(control, args[index+1]);
 				}
 	            // Reduce graph
 	            int flags = Model.HASMUTATIONS | Model.INTERNAL;
@@ -242,7 +242,7 @@ public class Main {
 	                flags = Integer.parseInt(args[index+1]);
 	            }
 	            Graph.reduce(train, flags);
-	            Graph.reduce(control, flags);
+//	            Graph.reduce(control, flags);
 	        }        
 			
 			// CONSTRUCT CONFIGURATION
@@ -271,7 +271,9 @@ public class Main {
 	            solutions = algorithm.run();
 	            System.err.println("Done. Time elapsed: "+algorithm.timeElapsed());
 	        } 
-			
+ 	        
+			//Logrank calculation for control group
+ 	        SolutionList.computeLogrankCrossval(control, solutions);
 			//p-value estimate
 	
 			config.progress = false;

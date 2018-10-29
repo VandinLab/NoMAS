@@ -80,7 +80,7 @@ public class Graphic {
 		g.translate(SOLUTION_WIDTH+GAP, 0);
 		drawLabels(g, train, solution, contributions);
 		g.translate(-SOLUTION_WIDTH-GAP-LABEL_WIDTH, SOLUTION_WIDTH+GAP);
-		drawMatrix(g, control, solution);
+		drawMatrixCrossval(g, control, solution);
 		g.setTransform(state);
 	}
 	
@@ -280,6 +280,28 @@ public class Graphic {
 		g.translate(0, MATRIX_CELL);
 		for(int j=0; j<model.m; j++) {
 			int mutation = Bitstring.getBit(solution.x, j);
+			g.setColor(MATRIX_COLOR[model.c[j]][mutation]);
+			g.fillRect(j*MATRIX_CELL, 0, MATRIX_CELL, MATRIX_CELL);
+		}
+		g.setColor(Color.BLACK);
+		g.setTransform(state);
+	}
+	
+	public static void drawMatrixCrossval(Graphics2D g, Model model, Solution solution) {
+		AffineTransform state = g.getTransform();
+		for(int i=0; i<solution.vertices.size(); i++) {
+			int[] x = (Graph.getVertexBySymbol(model, solution.vertices.get(i).gene.symbol)).gene.x;
+//			int[] x = solution.vertices.get(i).gene.x;
+			for(int j=0; j<model.m; j++) {
+				int mutation = Bitstring.getBit(x, j);
+				g.setColor(MATRIX_COLOR[model.c[j]][mutation]);
+				g.fillRect(j*MATRIX_CELL, 0, MATRIX_CELL, MATRIX_CELL);
+			}
+			g.translate(0, MATRIX_CELL);
+		}
+		g.translate(0, MATRIX_CELL);
+		for(int j=0; j<model.m; j++) {
+			int mutation = Bitstring.getBit(solution.xcv, j);
 			g.setColor(MATRIX_COLOR[model.c[j]][mutation]);
 			g.fillRect(j*MATRIX_CELL, 0, MATRIX_CELL, MATRIX_CELL);
 		}
