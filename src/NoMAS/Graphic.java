@@ -78,7 +78,7 @@ public class Graphic {
 		g.translate(LABEL_WIDTH, 0);
 		drawNetwork(g, train, solution, contributions);
 		g.translate(SOLUTION_WIDTH+GAP, 0);
-		drawLabels(g, train, solution, contributions);
+		drawLabelsCrossval(g, train, control, solution, contributions);
 		g.translate(-SOLUTION_WIDTH-GAP-LABEL_WIDTH, SOLUTION_WIDTH+GAP);
 		drawMatrixCrossval(g, control, solution);
 		g.setTransform(state);
@@ -93,6 +93,8 @@ public class Graphic {
 		g.drawString("Norm. log-rank: "+Utils.round(solution.nlr, 4), 0, font_height);
 		g.drawString("p-value tr: "+solution.pv, 0, 2*font_height);
 		g.drawString("p-value ctrl: "+solution.pcv, 0, 3*font_height);
+		g.drawString("ntr: "+solution.m1, 0, 4*font_height);
+		g.drawString("nctr: "+solution.m1cv, 0, 5*font_height);
 		g.setTransform(state);
 	}
 
@@ -248,6 +250,21 @@ public class Graphic {
 				g.translate(LABEL_WIDTH, -6*font_height);
 			}
 			g.drawString("("+(i+1)+") "+model.genes[solution.vertices.get(i).id].symbol+"   "+contributions[i], 0, 0);
+			g.translate(0, font_height);
+		}
+		g.setTransform(state);
+	}
+	
+	public static void drawLabelsCrossval(Graphics2D g, Model model, Model control, Solution solution, double[] contributions) {
+		AffineTransform state = g.getTransform();
+		FontMetrics metrics = g.getFontMetrics(g.getFont());
+		int font_height = metrics.getHeight();
+		g.translate(0, font_height/2);
+		for(int i=0; i<solution.vertices.size(); i++) {
+			if(i>0 && i%6 == 0) {
+				g.translate(LABEL_WIDTH, -6*font_height);
+			}
+			g.drawString("("+(i+1)+") "+model.genes[solution.vertices.get(i).id].symbol+"   "+contributions[i]+" ntr:"+model.genes[solution.vertices.get(i).id].m1+" nctrl:"+control.genes[solution.vertices.get(i).id].m1, 0, 0);
 			g.translate(0, font_height);
 		}
 		g.setTransform(state);
