@@ -5,8 +5,8 @@ public class Solution{
 	public static final String HEADER =
 	"Mutation count\tlog-rank\tnormalized log-rank\tp-value\tpermutation p-value\tsingle-gene score";
 	
-	public int[] x, xcv;
-	public int m1, m1cv;
+	public int[] x, xcv, xall;
+	public int m1, m1cv, m1all;
 	public double lr, lrcv, nlr, pv, pcv, ppv, score;
 	public ArrayList<Vertex> vertices;
 	public Solution next;
@@ -55,13 +55,20 @@ public class Solution{
 		m1 = Bitstring.numberOfSetBits(x);
 	}
 	
-	public void computePopulationVectorCrossval(Model model) {
-		xcv = Bitstring.getEmpty(model.m);
+	public void computePopulationVectorCrossval(Model control, Model all) {
+		xcv = Bitstring.getEmpty(control.m);
 		for(Vertex v : vertices) {
-			Vertex vc = Graph.getVertexBySymbol(model, v.gene.symbol);
+			Vertex vc = Graph.getVertexBySymbol(control, v.gene.symbol);
 			xcv = Bitstring.logicalOR(xcv, vc.gene.x);
 		}
 		m1cv = Bitstring.numberOfSetBits(xcv);
+		
+		xall = Bitstring.getEmpty(all.m);
+		for(Vertex v : vertices) {
+			Vertex vc = Graph.getVertexBySymbol(all, v.gene.symbol);
+			xall = Bitstring.logicalOR(xall, vc.gene.x);
+		}
+		m1all = Bitstring.numberOfSetBits(xall);
 	}
 	
 	public void computePopulationVector(int m) {

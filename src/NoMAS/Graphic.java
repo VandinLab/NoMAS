@@ -38,21 +38,21 @@ public class Graphic {
 		}catch(Exception e) {}
 	}
 	
-	public static void renderCrossval(String filename, Model train, Model control, Solution[] solutions) {
-		int width = getWidth(control, solutions);
-		int height = getHeight(control, solutions);
+	public static void renderCrossval(String filename, Model train, Model control, Model all, Solution[] solutions) {
+		int width = getWidth(all, solutions);
+		int height = getHeight(all, solutions);
 		BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 		Graphics2D g = (Graphics2D)img.getGraphics();
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g.setBackground(Color.WHITE);
 		g.clearRect(0, 0, width, height);
-		drawCrossval(g, width, train, control, solutions);
+		drawCrossval(g, width, train, control, all, solutions);
 		try {
 			ImageIO.write(img, "png", new File(filename+".png"));
 		}catch(Exception e) {}
 		}
 	
-	public static void drawCrossval(Graphics2D g, int width, Model train, Model control, Solution[] solutions) {
+	public static void drawCrossval(Graphics2D g, int width, Model train, Model control, Model all, Solution[] solutions) {
 		g.translate(GAP, GAP);
 		g.setColor(Color.BLACK);
 		drawHeader(g, train);
@@ -64,13 +64,13 @@ public class Graphic {
 			g.translate(0, GAP);
 			int height = SOLUTION_WIDTH + (solutions[i].vertices.size()+2)*MATRIX_CELL + GAP;
 			g.drawRect(0, 0, width-(2*GAP), height+2*GAP);
-			drawSolutionCrossVal(g, train, control, solutions[i]);
+			drawSolutionCrossVal(g, train, control, all, solutions[i]);
 			g.translate(0, height+GAP);
 		}
 		
 	}
 
-	public static void drawSolutionCrossVal(Graphics2D g, Model train, Model control, Solution solution) {
+	public static void drawSolutionCrossVal(Graphics2D g, Model train, Model control, Model all, Solution solution) {
 		double[] contributions = Solution.contributions(train, solution); 
 		AffineTransform state = g.getTransform();
 		g.translate(GAP, GAP);
@@ -80,7 +80,7 @@ public class Graphic {
 		g.translate(SOLUTION_WIDTH+GAP, 0);
 		drawLabelsCrossval(g, train, control, solution, contributions);
 		g.translate(-SOLUTION_WIDTH-GAP-LABEL_WIDTH, SOLUTION_WIDTH+GAP);
-		drawMatrixCrossval(g, control, solution);
+		drawMatrixCrossval(g, all, solution);
 		g.setTransform(state);
 	}
 	
@@ -264,7 +264,7 @@ public class Graphic {
 			if(i>0 && i%6 == 0) {
 				g.translate(LABEL_WIDTH, -6*font_height);
 			}
-			g.drawString("("+(i+1)+") "+model.genes[solution.vertices.get(i).id].symbol+"   "+contributions[i]+" ntr:"+model.genes[solution.vertices.get(i).id].m1+" nctrl:"+control.genes[solution.vertices.get(i).id].m1, 0, 0);
+			g.drawString("("+(i+1)+") "+model.genes[solution.vertices.get(i).id].symbol+"  "+contributions[i]+" ntr:"+model.genes[solution.vertices.get(i).id].m1+" nctrl:"+Graph.getVertexBySymbol(control, solution.vertices.get(i).gene.symbol).gene.m1, 0, 0);
 			g.translate(0, font_height);
 		}
 		g.setTransform(state);
@@ -318,7 +318,7 @@ public class Graphic {
 		}
 		g.translate(0, MATRIX_CELL);
 		for(int j=0; j<model.m; j++) {
-			int mutation = Bitstring.getBit(solution.xcv, j);
+			int mutation = Bitstring.getBit(solution.xall, j);
 			g.setColor(MATRIX_COLOR[model.c[j]][mutation]);
 			g.fillRect(j*MATRIX_CELL, 0, MATRIX_CELL, MATRIX_CELL);
 		}

@@ -172,6 +172,9 @@ public class Main {
 			
 			// the control set to perform validation
 			Model control = null;
+			
+			Model model = null;
+			
 	        if(import_file != null) {
 	        	
 	        System.out.println("TO BE IMPLEMENTED");
@@ -180,10 +183,12 @@ public class Main {
 	        	if((index = Utils.index(args, "output")) != -1) {
 	        		train = new Model(args[index+1]);
 	        		control = new Model(args[index+1]);
+	        		model = new Model(args[index+1]);
 		            }
 	        	 else {
 	        		train = new Model();
 	 	        	control = new Model();
+	 	        	model = new Model();
 	        	 	}	        		        	
 	            // Load network file
 	            String graph_file = "networks/hint+hi2012.txt";
@@ -192,6 +197,7 @@ public class Main {
 	            }
 	            Graph.loadGraph(graph_file, train);
 	            Graph.loadGraph(graph_file, control);
+	            Graph.loadGraph(graph_file, model);
 	            
 	            // Load data file
 	            String dataset_file = "datasets/demoDataset.txt";
@@ -223,6 +229,7 @@ public class Main {
 	            	proportion = Double.parseDouble(args[index+1]);
 	            }
 	            Mutations.loadMutationMatrixes(dataset_file, train, control, timesplits, splits, proportion, seed);
+	            Mutations.loadMutationMatrix(dataset_file, model);
 	            	            
 	            // Remove mutations
 	            double threshold = 3.0;
@@ -273,7 +280,7 @@ public class Main {
 	        } 
  	        
 			//Logrank calculation for control group
- 	        SolutionList.computeLogrankCrossval(control, solutions);
+ 	        SolutionList.computeLogrankCrossval(control, model, solutions);
 			//p-value estimate
 	
 			config.progress = false;
@@ -300,7 +307,7 @@ public class Main {
 			Output.solutions(out.stream, train, solutions);
 	        out.stream.flush();
 	        out.stream.close();
-	        Graphic.renderCrossval(outname, train, control, solutions);
+	        Graphic.renderCrossval(outname, train, control, model, solutions);
 	        
 	        // Output mutation/survival information
 			if((index = Utils.index(args, "mutinfo")) != -1) {

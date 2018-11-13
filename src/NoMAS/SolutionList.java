@@ -67,10 +67,10 @@ public class SolutionList {
 		}
 	}
 	
-	public static void computeLogrankCrossval(Model model, Solution... solutions) {
+	public static void computeLogrankCrossval(Model control, Model all, Solution... solutions) {
 		for(Solution solution : solutions) {
-			solution.computePopulationVectorCrossval(model);
-			solution.computeLogrankStatisticCrossval(model);
+			solution.computePopulationVectorCrossval(control, all);
+			solution.computeLogrankStatisticCrossval(control);
 		}
 	}
 	
