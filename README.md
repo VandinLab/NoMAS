@@ -144,7 +144,7 @@ splits          integer > 0             10              Crossval mode only: numb
  
 proportion      double > 0, < 1         0.5             Crossval mode only: proportion of the size of training group respect to control group
  
-randseed	number (integer		 - 		Crossval mode only: seed for randomization of groups splitting (for results 			or long)				reproducibility)
+randseed	number (integer or long) - 		Crossval mode only: seed for randomization of groups splitting (for results 								reproducibility)
 				
 
 -----------------------------------------------------------------------------------------
