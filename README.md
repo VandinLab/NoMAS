@@ -242,4 +242,5 @@ REFERENCES:
 --------------------
 if you use NoMAS, please cite: 
 Federico Altieri, Tommy Hansen and Fabio Vandin. NoMAS: A Computational Approach to Find Mutated Subnetworks Associated with Survival in Genome-Wide Cancer Studies, doi: 10.3389/fgene.2019.00265 
+
 Tommy Hansen and Fabio Vandin. Finding Mutated Subnetworks Associated with Survival Time in Cancer. RECOMB 2016
