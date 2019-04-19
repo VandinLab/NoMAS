@@ -3,14 +3,34 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.io.*;
 
+/**
+ * Abstract class with core elements of SNoMAS SNoMAS(0,1,2) runs NoMAS on a subnetwork of the complete gene interaction network. 
+ * The subnetwork is defined by a set, S, of seed vertices, and consists of all the vertices reachable by at most edges. 
+ * SNoMAS is a local search algorithm and all its solutions contain at least one of the seed vertices from S.
+ * 
+ * @author Federico Altieri
+ * @author Tommy V. Hansen
+ * @author Fabio Vandin
+ *
+ */
 public abstract class AbstractSNoMAS extends AbstractNoMAS {
 	public int[] vertex_cost;
 	public ArrayList<ArrayList<Vertex>> job_queue;
 	
+	/**
+	 * Base constructor that simply invokes the one from superclass
+	 * 
+	 * @param model
+	 * @param config
+	 */
 	public AbstractSNoMAS(Model model, Configuration config) {
 		super(model, config);
 	}
 	
+	//override
+	/**
+	 *{@inheritDoc}
+	 */
 	public void initialize() {
 		ArrayList<Vertex> seeds = null;
 		if(config.seeds == null) {
@@ -24,6 +44,12 @@ public abstract class AbstractSNoMAS extends AbstractNoMAS {
 		computeWorkloads();
 	}
 	
+	
+	/**
+	 * Computes and distributes algorithm workload on the processors. 
+	 * Number of processors is passed as a parameter when configuring algorithm execution.
+	 * 
+	 */
 	public void computeWorkloads() {
 		job_queue = new ArrayList<ArrayList<Vertex>>();
 		int[] last_assigned = new int[config.k];
@@ -40,6 +66,13 @@ public abstract class AbstractSNoMAS extends AbstractNoMAS {
 		}
 	}
 	
+	/**
+	 * Retrieves the seed vertexes from an external file
+	 * 
+	 * @param model that contains the whole network to process
+	 * @param filename path to file
+	 * @return An ArrayList of such seed vertexes
+	 */
 	public static ArrayList<Vertex> loadSeedsFromFile(Model model, String filename) {
 		ArrayList<Vertex> seeds = new ArrayList<Vertex>();
 		BufferedReader file = Utils.bufferedReader(filename);
@@ -63,6 +96,11 @@ public abstract class AbstractSNoMAS extends AbstractNoMAS {
 		return seeds;
 	}
 	
+	/**
+	 * Generates seed vertices from scratch. The seed are obtained as the set of the vertexes from the solutions of a run of base version of NoMas.
+	 * 
+	 * @return The vertexes set in form of ArrayList
+	 */
 	public ArrayList<Vertex> generateSeeds() {
         System.err.println("Generating seed vertices...");
 		Configuration config2 = new Configuration();
@@ -120,6 +158,9 @@ public abstract class AbstractSNoMAS extends AbstractNoMAS {
 		Utils.join(threads);
 	}
 	
+	/**
+	 *{@inheritDoc}
+	 */
 	public Solution computeEntry(Vertex v, int T, int last, int p) {
 		Solution best = null;
 		for(int rowQ=last; rowQ>=0; rowQ--) {
@@ -144,5 +185,11 @@ public abstract class AbstractSNoMAS extends AbstractNoMAS {
 		return best;
 	}
 
+	/**
+	 * computes, for a single vertex, the costs of reaching all other vertexes in the network
+	 * 
+	 * @param dist the distances array computed in terms of shortest paths length from vertex subject to all other vertexes 
+	 * @return the costs array
+	 */
 	public abstract int[] getVertexCost(int[] dist);
 }
