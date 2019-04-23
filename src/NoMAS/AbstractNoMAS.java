@@ -3,7 +3,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 /**
- * Abstract class with core elements of NoMas algorithm to solve the optimization problem, as described in https://doi.org/10.3389/fgene.2019.00265  
+ * Abstract class with core elements of NoMas algorithm to solve the optimization problem, as described in {@link https://doi.org/10.3389/fgene.2019.00265}  
  * 
  * @author Federico Altieri
  * @author Tommy V. Hansen
@@ -11,21 +11,54 @@ import java.util.concurrent.*;
  *
  */
 public abstract class AbstractNoMAS implements Algorithm {
+	/**
+	 * {@link Model} containing input data.
+	 */
 	public Model model;
+	/**
+	 * {@link Configuration} containing algorithm parameters and system configuration.
+	 */
 	public Configuration config;
+	/**
+	 * Table of partial solutions to be filled through dynamic programming.
+	 */
 	public Solution[][] W;
+	/**
+	 * Number of rows of the partial solutions table. It coincides with the number of extracted color combinations on the vertexes graph.
+	 */
 	public int rows;
-	public int iterations_performed;
-	public int[] colorset_to_row, row_to_colorset, colorset_groups;
+
+	private int iterations_performed;
+	/**
+	 * array that stores (if filled), at colorset_to_row[i] the index of row_to_colorset relative to the combinations of colors represented by the bitstring i.
+	 */
+	public int[] colorset_to_row; 
+	/**
+	 * array that stores, at row_to_colorset[i], a combination of colors.
+	 */
+	public int[] row_to_colorset;
+	/**
+	 * array that stores, at colorset_groups[i] the number of combinations of at most i colors in a sequence of colors drafted randomly.
+	 */
+	public int[] colorset_groups;
+	/**
+	 * Start time of the elaboration of the algorithm, in nanoseconds.
+	 */
 	public long start_time;
+	/**
+	 * elapsed time in elaboration since start_time. Similar to wall-clock time.
+	 */
 	public double time_elapsed;
+	/**
+	 * {@link Progressbar} instance that provides a visual aid to user to understand percentage of completion of the process.
+	 */
 	public Progressbar progress;
 
 	/**
 	 * Abstract class with core elements of NoMas algorithm, presented in {@link https://doi.org/10.3389/fgene.2019.00265}
 	 * 
-	 * @param model instance of Model containing the input data
-	 * @param config instance of Configuration containing the parameters of the algorithm
+	 * @param model instance of {@link Model} containing input data.
+	 * @param config instance of {@link Configuration} containing algorithm parameters and system configuration.
 	 */
 	public AbstractNoMAS(Model model, Configuration config) {
 		this.model = model;
@@ -90,8 +123,8 @@ public abstract class AbstractNoMAS implements Algorithm {
 	/**
 	 * Performs a single color coding iteration and computes the table of solutions relative to the picked configuration, collecting the best solutions.
 	 * 
-	 * @param rng The random number generator to use
-	 * @list The list into which the best solutions are inserted
+	 * @param rng The {@link Random} random number generator to use
+	 * @list The list into which the best solutions are inserted as an array of {@link Solution}
 	 */
 	public void iterate(Random rng, Solution[] list) {
 		Graph.color(rng.nextInt(), config.colors, model);
@@ -103,7 +136,7 @@ public abstract class AbstractNoMAS implements Algorithm {
 	/**
 	 * Screens the entire table for the best solutions.
 	 *
-	 * @param list The list into which the best solutions are inserted
+	 * @param list The list into which the best solutions are inserted as an array of {@link Solution}
 	 */
 	public void screenSolutions(Solution[] list) {
 		for(Solution[] row : W) {
@@ -122,8 +155,7 @@ public abstract class AbstractNoMAS implements Algorithm {
 	/**
 	 * Looks for a certain solution inside the two-dimensional table of partial solutions. Returns true if found
 	 * 
-	 * 
-	 * @param s the solution to look for
+	 * @param s the instance of {@link Solution} to look for
 	 * @return true if found, false elsewhere
 	 */
 	public boolean isFound(Solution s) {
@@ -188,32 +220,32 @@ public abstract class AbstractNoMAS implements Algorithm {
 	}
 
 	/**
-	 * Istantiates a new solution with a vertex of the network and based on the passed parameters
+	 * Instantiates a new {@link Solution} with a vertex of the network and based on the passed parameters
 	 * 
-	 * @param v the base vertex of the solution
-	 * @return the istantiated solution
+	 * @param v the base instance of {@link Vertex} to use to initialize the new instance of {@link Solution}
+	 * @return the instantiated {@link Solution}
 	 */
 	public Solution computeTrivialEntry(Vertex v) {
 		return new Solution(v, model);
 	}
 	
 	/**
-	 * Abstract method that has to be extended with the implementation of the strategy of the computation of the table of the partial solutions.
+	 * Method that implements the strategy of the computation of the table of the partial solutions.
 	 * The process computes the solutions by pivoting a vertex and computing new candidate solutions by merging the partial solutions relative to the vertex passed as parameter and its neighbors.
 	 * The table is scanned backwards from the row index passed as parameter and the best among computed solutions is computed.
 	 * 
-	 * @param v the vertex to be examined as pivot
-	 * @param T bits representing the set of vertexes collected from the selected color coding configuration
+	 * @param v the instance of {@link Vertex} representing the node of the network to be examined as pivot
+	 * @param T bitstring (see {@link Bitstring}) representing the set of vertexes collected from the selected color coding configuration
 	 * @param last index to consider in the computation of the solutions
-	 * @param p implemented only in NoMas 2 (see https://doi.org/10.3389/fgene.2019.00265 for details about the second modified version of the algorithm)
+	 * @param p implemented only in NoMas mod 2 (see https://doi.org/10.3389/fgene.2019.00265 for details about the second modified version of the algorithm)
 	 * @return best solution computed among the candidates
 	 */
 	public abstract Solution computeEntry(Vertex v, int T, int last, int p);
 	
 	/**
-	 * Checks if all iterations are done. Returns true in case.
+	 * Checks if iterations limit is hit. Returns true in case.
 	 * 
-	 * @return true if alla the iterations are performed
+	 * @return true if all the iterations are performed
 	 */
 	public boolean isDone() {
 		if(!config.timing && iterations_performed < config.iterations) {

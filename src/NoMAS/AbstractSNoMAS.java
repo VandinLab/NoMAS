@@ -14,14 +14,20 @@ import java.io.*;
  *
  */
 public abstract class AbstractSNoMAS extends AbstractNoMAS {
+	/**
+	 * variables that stores, at index i, the cost of reaching the i-th node of the graph given the seed vertexes. It stores 0 when the node is outside the local search space scope.
+	 */
 	public int[] vertex_cost;
+	/**
+	 * {@link ArrayList} of {@link ArrayList} instances that stores the scheduling of the nodes to process into queues of jobs.
+	 */
 	public ArrayList<ArrayList<Vertex>> job_queue;
 	
 	/**
 	 * Base constructor that simply invokes the one from superclass
 	 * 
-	 * @param model
-	 * @param config
+	 * @param model {@link Model} containing input data.
+	 * @param config {@link Configuration} containing algorithm parameters and system configuration.
 	 */
 	public AbstractSNoMAS(Model model, Configuration config) {
 		super(model, config);
@@ -69,9 +75,9 @@ public abstract class AbstractSNoMAS extends AbstractNoMAS {
 	/**
 	 * Retrieves the seed vertexes from an external file
 	 * 
-	 * @param model that contains the whole network to process
+	 * @param model {@link Model}that contains the whole network to process
 	 * @param filename path to file
-	 * @return An ArrayList of such seed vertexes
+	 * @return An {@link ArrayList} of such seed {@link Vertex} instances
 	 */
 	public static ArrayList<Vertex> loadSeedsFromFile(Model model, String filename) {
 		ArrayList<Vertex> seeds = new ArrayList<Vertex>();
@@ -99,7 +105,7 @@ public abstract class AbstractSNoMAS extends AbstractNoMAS {
 	/**
 	 * Generates seed vertices from scratch. The seed are obtained as the set of the vertexes from the solutions of a run of base version of NoMas.
 	 * 
-	 * @return The vertexes set in form of ArrayList
+	 * @return The vertexes set in form of {@link ArrayList}
 	 */
 	public ArrayList<Vertex> generateSeeds() {
         System.err.println("Generating seed vertices...");

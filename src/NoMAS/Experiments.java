@@ -1,6 +1,14 @@
 package NoMAS;
 import java.util.*;
 
+/**
+ * Test class
+ * 
+ * @author Federico Altieri
+ * @author Tommy V. Hansen
+ * @author Fabio Vandin
+ *
+ */
 public class Experiments {
     public static Model getThesisModel(String graph, String matrix) {
 		Model model = new Model();

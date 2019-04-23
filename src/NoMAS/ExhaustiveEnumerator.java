@@ -2,21 +2,55 @@ package NoMAS;
 import java.util.*;
 import java.util.concurrent.*;
 
+/**
+ * @author Federico Altieri
+ * @author Tommy V. Hansen
+ * @author Fabio Vandin
+ *
+ */
 public class ExhaustiveEnumerator implements Algorithm {
+	/**
+	 * 
+	 */
 	public Model model;
+	/**
+	 * 
+	 */
 	public Configuration config;
+	/**
+	 * 
+	 */
 	public Solution[][] solutions;
+	/**
+	 * 
+	 */
 	public Progressbar progress;
+	/**
+	 * 
+	 */
 	public int done;
+	/**
+	 * 
+	 */
 	public int[] timestamps;
+	/**
+	 * 
+	 */
 	public double time_elapsed;
 	
+	/**
+	 * @param model
+	 * @param config
+	 */
 	public ExhaustiveEnumerator(Model model, Configuration config) {
 		this.model = model;
 		this.config = config;
 		progress = new Progressbar(50);
 	}
 	
+	/**
+	 *{@inheritDoc}
+	 */
 	public Solution[] run() {
 		solutions = new Solution[2][10];
 		computeTimestamps();
@@ -53,10 +87,21 @@ public class ExhaustiveEnumerator implements Algorithm {
 		return both_solutions;
 	}
 	
+	/**
+	 *{@inheritDoc}
+	 */
 	public double timeElapsed() {
 		return time_elapsed;
 	}
 	
+	/**
+	 * @param size
+	 * @param v
+	 * @param beta
+	 * @param xn
+	 * @param timestamp
+	 * @return
+	 */
 	public Node depth(int size, Vertex v, ArrayList<Node> beta, int[] xn, int timestamp) {
 		size++;
 		if(size > config.k) {
@@ -86,6 +131,14 @@ public class ExhaustiveEnumerator implements Algorithm {
 		return n;
 	}
 	
+	/**
+	 * @param size
+	 * @param n
+	 * @param v
+	 * @param xn
+	 * @param timestamp
+	 * @return
+	 */
 	public Node breadth(int size, Node n, Vertex v, int[] xn, int timestamp) {
 		size++;
 		if(xn_included(xn, n.vertex)) {
@@ -111,6 +164,11 @@ public class ExhaustiveEnumerator implements Algorithm {
 		return n_prime;
 	}
 	
+	/**
+	 * @param root
+	 * @param solution
+	 * @param lists
+	 */
 	public void traverse(Node root, Solution solution, Solution[][] lists) {
 		Solution candidate = new Solution(root.vertex, model);
 		if(solution != null) {
@@ -123,6 +181,9 @@ public class ExhaustiveEnumerator implements Algorithm {
 		}
 	}
 	
+	/**
+	 * @param lists
+	 */
 	public synchronized void submitSolutions(Solution[][] lists) {
 		solutions[0] = SolutionList.merge(10, Model.MIN_NLR, solutions[0], lists[0]);
 		solutions[1] = SolutionList.merge(10, Model.MAX_NLR, solutions[1], lists[1]);
@@ -130,6 +191,9 @@ public class ExhaustiveEnumerator implements Algorithm {
 		progress.update(done/(double)model.n);
 	}
 	
+	/**
+	 * 
+	 */
 	public void computeTimestamps() {
 		timestamps = new int[model.n];
 		Integer[] mapping = new Integer[model.n];
@@ -146,10 +210,19 @@ public class ExhaustiveEnumerator implements Algorithm {
 		}
 	}
 	
+	/**
+	 * @param xn
+	 * @param v
+	 * @return
+	 */
 	public boolean xn_included(int[] xn, Vertex v) {
 		return (v == null) ? false : (xn[v.id] == 1);
 	}
 	
+	/**
+	 * @param xn
+	 * @param v
+	 */
 	public void xn_add(int[] xn, Vertex v) {
 		xn[v.id]++;
 		for(Vertex u : v.neighbors) {
@@ -159,6 +232,10 @@ public class ExhaustiveEnumerator implements Algorithm {
 		}
 	}
 	
+	/**
+	 * @param xn
+	 * @param v
+	 */
 	public void xn_remove(int[] xn, Vertex v) {
 		xn[v.id]--;
 		for(Vertex u : v.neighbors) {
@@ -168,16 +245,37 @@ public class ExhaustiveEnumerator implements Algorithm {
 		}
 	}	
 	
+	/**
+	 * @author Federico Altieri
+	 * @author Tommy V. Hansen
+	 * @author Fabio Vandin
+	 *
+	 */
 	private class Node {
+		/**
+		 * 
+		 */
 		Vertex vertex;
+		/**
+		 * 
+		 */
 		Node parent;
+		/**
+		 * 
+		 */
 		ArrayList<Node> children;
 		
+		/**
+		 * @param v
+		 */
 		public Node(Vertex v) {
 			vertex = v;
 			children = new ArrayList<Node>();
 		}
 		
+		/**
+		 * @param child
+		 */
 		public void addChild(Node child) {
 			children.add(child);
 			child.parent = this;

@@ -1,10 +1,25 @@
 package NoMAS;
 
+/**
+ * NoMAS algorithm that implement the "Fat Table" variant. Further details in the supplementary material of {@link https://doi.org/10.3389/fgene.2019.00265}
+ * 
+ * @author Federico Altieri
+ * @author Tommy V. Hansen
+ * @author Fabio Vandin
+ *
+ */
 public class FatNoMAS extends AbstractNoMAS {
+	/**
+	 * @param model {@link Model} containing input data.
+	 * @param config {@link Configuration} containing algorithm parameters and system configuration.
+	 */
 	public FatNoMAS(Model model, Configuration config) {
 		super(model, config);
 	}
 
+	/**
+	 *{@inheritDoc}
+	 */
 	public Solution computeEntry(Vertex v, int T, int last, int p) {
 		Solution[] best = new Solution[config.L];
 		for(int rowQ=last; rowQ>=0; rowQ--) {
@@ -23,6 +38,13 @@ public class FatNoMAS extends AbstractNoMAS {
 		return SolutionList.toLinkedList(best);
 	}
 	
+	/**
+	 * Computes an array containing the best scoring subnetworks obtainable by all possible merging of the given subnetworks. All merged subnetworks are explored with an exhaustive approach.
+	 * 
+	 * @param a instance of {@link Solution} representing the first subnetwork to merge
+	 * @param b instance of {@link Solution} representing the second subnetwork to merge
+	 * @param list array of {@link Solution} instances of best scoring merged subnetworks
+	 */
 	public final void crossProduct(Solution a, Solution b, Solution[] list) {
 		while(a != null) {
 			Solution inner = b;

@@ -2,7 +2,7 @@ package NoMAS;
 
 /**
  * 
- * Abstract class with core elements of a Greedy strategy to solve the optimization problem  presented in {@link https://doi.org/10.3389/fgene.2019.00265}
+ * Abstract class with core elements of a Greedy strategy to solve the optimization problem presented in {@link https://doi.org/10.3389/fgene.2019.00265}
  * 
  * @author Federico Altieri
  * @author Tommy V. Hansen
@@ -10,15 +10,24 @@ package NoMAS;
  *
  */
 public abstract class AbstractGreedy implements Algorithm {
+	/**
+	 * {@link Model} containing input data.
+	 */
 	public Model model;
+	/**
+	 * {@link Configuration} containing algorithm parameters and system configuration.
+	 */
 	public Configuration config;
+	/**
+	 * variable that tracks elapsed time.
+	 */
 	public double time_elapsed;
 	
 	/**
 	 * Class constructor with base parameters
 	 * 
-	 * @param model instance of Model containing the input data
-	 * @param config instance of Configuration containing the parameters of the algorithm
+	 * @param model instance of {@link Model} containing the input data
+	 * @param config instance of {@link Configuration} containing the parameters of the algorithm
 	 */
 	public AbstractGreedy(Model model, Configuration config) {
 		this.model = model;
@@ -61,9 +70,9 @@ public abstract class AbstractGreedy implements Algorithm {
 	/**
 	 * Method that creates and expands a new solution starting from a vertex of the network using a greedy strategy.
 	 * 
-	 * @param v Vertex base for the solution
+	 * @param v {@link Vertex} base for the solution
 	 * @param k the size of the solution
-	 * @return the expanded solution
+	 * @return the expanded {@link Solution}
 	 */
 	public Solution expand(Vertex v, int k) {
 		Solution solution = new Solution(v, model);
@@ -72,11 +81,11 @@ public abstract class AbstractGreedy implements Algorithm {
 	
 	
 	/**
-	 * Method that expands a solution starting from a smaller one, using a greedy strategy.
+	 * Method that expands a {@link Solution} starting from a smaller one, using a greedy strategy.
 	 * 
-	 * @param s the base solution
-	 * @param k the size of the solution
-	 * @return the expanded solution
+	 * @param s the base {@link Solution}
+	 * @param k the size of the {@link Solution}
+	 * @return the expanded {@link Solution}
 	 */
 	public abstract Solution expand(Solution s, int k);
 }

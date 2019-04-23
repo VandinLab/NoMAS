@@ -2,7 +2,9 @@ package NoMAS;
 import java.util.*;
 
 /**
- * Class of utilities for bitwise based operations. Information are passed to method as integers and treated as sequences of bits All methods are static
+ * Class of utilities for bitwise based operations. Information are passed to method as sequences of bits represented as integers (the bitstrings)
+ * and matrixes as arrays of integers (the bitsets).
+ * All methods are static.
  * 
  * @author Federico Altieri
  * @author Tommy V. Hansen
@@ -40,7 +42,7 @@ public class Bitstring {
 	}
 	
 	/**
-	 * Returns the number of set bits in the given bitsets.
+	 * Returns the number of bits set to 1 in the given bitsets.
 	 * Uses Brian Kernighan's bits counting algorithm.
 	 * 
 	 * @param X the bitset to analize
@@ -59,6 +61,10 @@ public class Bitstring {
 	/**
 	 * Computes the dot product between the given bitstring
 	 * and the given array of real values.
+	 * 
+	 * @param X the bitstring in form of array
+	 * @param w the array of real values
+	 * @return the product
 	 */
 	public static final double dotProductWithArray(int[] X, double[] w) {
 		double dp = 0.0;
@@ -75,10 +81,10 @@ public class Bitstring {
 	}
 	
 	/**
-	 * Compute the logrank of the passed instance of Solution based on the passed weights array when splitting input data for cross validation
-	 * This method writes the output into the variables dedicated to crossval strategy, but does not perform any split of input data
+	 * Computes the logrank of the passed instance of Solution based on the passed weights array when splitting input data for cross validation.
+	 * This method writes the output into the variables dedicated to crossval strategy, but does not perform any split of input data.
 	 * 
-	 * @param solution whose logrank has to be computed
+	 * @param solution instance of {@link Solution} whose logrank has to be computed
 	 * @param w the weights array
 	 */
 	public static final void logrankAndCountCrossval(Solution solution, double[] w) {
@@ -99,9 +105,9 @@ public class Bitstring {
 	}
 	
 	/**
-	 * Compute the logrank of the passed instance of Solution based on the passed weights array
+	 * Computes the logrank of the passed instance of Solution based on the passed weights array.
 	 * 
-	 * @param solution whose logrank has to be computed
+	 * @param solution instance of {@link Solution} whose logrank has to be computed
 	 * @param w the weights array
 	 */
 	public static final void logrankAndCount(Solution solution, double[] w) {
@@ -122,7 +128,8 @@ public class Bitstring {
 	}
 	
 	/**
-	 * Returns bitwise a - b if b subset of a, and 0 otherwise
+	 * Returns bitwise a - b if b subset of a, and 0 otherwise.
+	 * 
 	 * @param a operand a
 	 * @param b operand b
 	 * @return the result of the operation
@@ -132,31 +139,31 @@ public class Bitstring {
 	}
 	
 	/**
-	 * Sets the i-th bit of number n to 1 
+	 * Sets the i-th bit of a bitstring to 1.
 	 * 
-	 * @param n
+	 * @param n the bitstring
 	 * @param i the position to set to 1 (first index is 0)
-	 * @return n with the desired transformation
+	 * @return the bitstring with the desired transformation
 	 */
 	public static int setBit(int n, int i) {
 		return n | (1<<i);
 	}
 	
 	/**
-	 * Sets the i-th bit of number n to 0 
+	 * Sets the i-th bit of a bitstring to 0. 
 	 * 
-	 * @param n
+	 * @param n the bitstring
 	 * @param i the position to set to 0 (first index is 0)
-	 * @return n with the desired transformation
+	 * @return the bitstring with the desired transformation
 	 */
 	public static int clearBit(int n, int i) {
 		return n & ~(1<<i);
 	}
 	
 	/**
-	 * returns the i-th bit of number n 
+	 * returns the i-th bit of a bitstring 
 	 * 
-	 * @param n
+	 * @param n the bitstring
 	 * @param i the position to retrieve (first index is 0)
 	 * @return the desired bit
 	 */
@@ -165,7 +172,7 @@ public class Bitstring {
 	}
 	
 	/**
-	 * Sets the i-th bit of the array of integers to 1. The array is considered as an unique long sequence of bits obtained through the bitwise concatenation of its elements.
+	 * Sets the i-th bit of a bitstring to 1. The array is considered as an unique long sequence of bits obtained through the bitwise concatenation of its elements.
 	 * 
 	 * @param X the array of integers
 	 * @param i the position to set to 1 (first index is 0)
@@ -175,7 +182,7 @@ public class Bitstring {
 	}
 	
 	/**
-	 * Sets the i-th bit of the array of integers to 0. The array is considered as an unique long sequence of bits obtained through the bitwise concatenation of its elements.
+	 * Sets the i-th bit of a bitstring to 0. The array is considered as an unique long sequence of bits obtained through the bitwise concatenation of its elements.
 	 * 
 	 * @param X the array of integers
 	 * @param i the position to set to 0 (first index is 0)
@@ -185,7 +192,7 @@ public class Bitstring {
 	}
 	
 	/**
-	 * Gets the i-th bit of the array. The array is considered as an unique long sequence of bits obtained through the bitwise concatenation of its elements.
+	 * Gets the i-th bit of a bitstring. The array is considered as an unique long sequence of bits obtained through the bitwise concatenation of its elements.
 	 * 
 	 * @param X the array of integers
 	 * @param i the position to retrieve (first index is 0)
@@ -196,20 +203,20 @@ public class Bitstring {
 	}
 	
 	/**
-	 * Creates a new bit sequence as an array of integers. The size of the obtained sequence is equal to the closest multiple of 31 greater than the length passed as parameter
+	 * Creates a new bitset. The size of the obtained sequence is equal to the closest multiple of 31 greater than the length passed as parameter
 	 * All bits are set to 0 
 	 * 
 	 * @param length lower bound of the sequence length
-	 * @return the sequence of bits
+	 * @return the bitset
 	 */
 	public static int[] getEmpty(int length) {
 		return new int[(length+BITS-1)/BITS];
 	}
 	
 	/**
-	 * sets all the bits of a sequence to 0
+	 * Sets all the bits of a bitset to 0
 	 * 
-	 * @param x the array to clear
+	 * @param x the bitset to clear
 	 */
 	public static void clear(int[] x) {
 		for(int i=0; i<x.length; i++) {
@@ -218,13 +225,13 @@ public class Bitstring {
 	}
 	
 	/**
-	 * Creates a new bit sequence as an array of integers. The size of the obtained sequence is equal to the closest multiple of 31 greater than the length passed as parameter
+	 * Creates a new bitset. The size of the obtained sequence is equal to the closest multiple of 31 greater than the length passed as parameter
 	 * All bits are set to a random value, with only k bits set to 1
 	 * 
-	 * @param rng the java.util.Random object that performs randomization
+	 * @param rng the {@link Random} instance that performs randomization
 	 * @param length lower bound of the sequence length
 	 * @param k the number of bits to set to 1
-	 * @return the created sequence
+	 * @return the created bitset
 	 */
 	public static int[] randomBitstring(Random rng, int length, int k) {
 		int[] A = new int[length];
@@ -261,11 +268,11 @@ public class Bitstring {
 	}
 
 	/**
-	 * returns a String with the first k bits of A
+	 * Returns a String with the first k bits of A
 	 * 
-	 * @param A the sequence of bits
+	 * @param A the bitset
 	 * @param k number of bits to print
-	 * @return the result String
+	 * @return the resulting instance of {@link String}
 	 */
 	public static String asString(int A, int k) {
 		String s = "";
@@ -276,11 +283,11 @@ public class Bitstring {
 	}
 	
 	/**
-	 * returns a String with the first k bits of all integer in a given array
+	 * Returns a String with the first k columns of a bitset
 	 * 
-	 * @param A the array of integers
+	 * @param A the bitset
 	 * @param k number of bits to print for each integer
-	 * @return the result String
+	 * @return the resulting instance of {@link String}
 	 */
 	public static String asString(int[] A, int k) {
 		String s = asString(A[A.length-1], k%BITS);

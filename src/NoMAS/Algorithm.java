@@ -12,9 +12,9 @@ package NoMAS;
 public interface Algorithm  {
 	
 	/**
-	 * Executes the algorithm. No parameter is passed here.
+	 * Executes the algorithm and returns the highest scoring networks. No parameter is passed here.
 	 * 
-	 * @return an array of Solutions computed by the algorithm.
+	 * @return an array of {@link Solution} instances computed by the algorithm.
 	 */
 	public Solution[] run();
 	
