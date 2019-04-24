@@ -4,8 +4,15 @@ import java.awt.geom.*;
 import java.awt.image.*;
 import java.io.*;
 import javax.imageio.*;
-import java.util.*;
 
+/**
+ * Class of utilities used in the realization of graphic render of the output of the algorithm
+ * 
+ * @author Federico Altieri
+ * @author Tommy V. Hansen
+ * @author Fabio Vandin
+ *
+ */
 public class Graphic {
 	public static final int MATRIX_CELL = 3;
 	public static final int VERTEX_RADIUS = 12;
@@ -24,6 +31,13 @@ public class Graphic {
 	public static final Color POSITIVE_COLOR = new Color(100, 240, 85);
 	public static final Color NEGATIVE_COLOR = new Color(235, 45, 45);
 	
+	/**
+	 * Instantiates the objects for rendering and organizes the print of {@link Solution} instances.
+	 * 
+	 * @param filename {@link String} path to the file to write.
+	 * @param model {@link Model} containing data.
+	 * @param solutions {@link Solution} instances to render.
+	 */
 	public static void render(String filename, Model model, Solution... solutions) {
 		int width = getWidth(model, solutions);
 		int height = getHeight(model, solutions);
@@ -38,6 +52,15 @@ public class Graphic {
 		}catch(Exception e) {}
 	}
 	
+	/**
+	 * Instantiates the objects for rendering and organizes the print of {@link Solution} instances when using the statistical verification with the holdout approach. 
+	 * 
+	 * @param filename {@link String} path to the file to write.
+	 * @param train {@link Model} containing data about the training set.
+	 * @param control {@link Model} containing data about the validation set.
+	 * @param all {@link Model} containing all data.
+	 * @param solutions array of {@link Solution} instances to render.
+	 */
 	public static void renderCrossval(String filename, Model train, Model control, Model all, Solution[] solutions) {
 		int width = getWidth(all, solutions);
 		int height = getHeight(all, solutions);
@@ -52,6 +75,16 @@ public class Graphic {
 		}catch(Exception e) {}
 		}
 	
+	/**
+	 * Coordinates the rendering of {@link Solution} instances when using the statistical verification with the holdout approach. 
+	 * 
+	 * @param g The {@link Graphics2D} instance that performs the render.
+	 * @param width the width of the render space.
+	 * @param train {@link Model} containing data about the training set.
+	 * @param control {@link Model} containing data about the validation set.
+	 * @param all {@link Model} containing all data.
+	 * @param solutions array of {@link Solution} instances to render.
+	 */
 	public static void drawCrossval(Graphics2D g, int width, Model train, Model control, Model all, Solution[] solutions) {
 		g.translate(GAP, GAP);
 		g.setColor(Color.BLACK);
@@ -70,6 +103,15 @@ public class Graphic {
 		
 	}
 
+	/**
+	 * Renders the passed instance of {@link Solution} when using the statistical verification with the holdout approach. 
+	 * 
+	 * @param g The {@link Graphics2D} instance that performs the render.
+	 * @param train {@link Model} containing data about the training set.
+	 * @param control {@link Model} containing data about the validation set.
+	 * @param all {@link Model} containing all data.
+	 * @param solution {@link Solution} instance to render.
+	 */
 	public static void drawSolutionCrossVal(Graphics2D g, Model train, Model control, Model all, Solution solution) {
 		double[] contributions = Solution.contributions(train, solution); 
 		AffineTransform state = g.getTransform();
@@ -84,6 +126,12 @@ public class Graphic {
 		g.setTransform(state);
 	}
 	
+	/**
+	 * Draws the statistical summary of the passed instance of {@link Solution} when using the statistical verification with the holdout approach. 
+	 * 
+	 * @param g The {@link Graphics2D} instance that performs the render.
+	 * @param solution {@link Solution} instance to render.
+	 */
 	public static void drawSummaryCrossval(Graphics2D g, Solution solution) {
 		AffineTransform state = g.getTransform();
 		FontMetrics metrics = g.getFontMetrics(g.getFont());
@@ -98,6 +146,13 @@ public class Graphic {
 		g.setTransform(state);
 	}
 
+	/**
+	 * Computes the overall height of the output image.
+	 * 
+	 * @param model {@link Model} containing all data.
+	 * @param solutions {@link Solution} instances to render.
+	 * @return the height
+	 */
 	public static int getHeight(Model model, Solution... solutions) {
 		int height = 3*GAP + HEADER_HEIGHT;
 		for(Solution s : solutions) {
@@ -106,6 +161,13 @@ public class Graphic {
 		return height;
 	}
 	
+	/**
+	 * Computes the overall width of the output image.
+	 * 
+	 * @param model {@link Model} containing all data.
+	 * @param solutions {@link Solution} instances to render.
+	 * @return the width 
+	 */
 	public static int getWidth(Model model, Solution... solutions) {
 		int width = Math.max(4*GAP + model.m*MATRIX_CELL, 2*GAP+HEADER_WIDTH);
 		for(Solution s : solutions) {
@@ -115,6 +177,14 @@ public class Graphic {
 		return width;
 	}
 	
+	/**
+	 * Coordinates the rendering of {@link Solution} instances.
+	 * 
+	 * @param g The {@link Graphics2D} instance that performs the render.
+	 * @param width the width of the render space.
+	 * @param model {@link Model} instance containing data.
+	 * @param solutions {@link Solution} instances to render.
+	 */
 	public static void draw(Graphics2D g, int width, Model model, Solution... solutions) {
 		g.translate(GAP, GAP);
 		g.setColor(Color.BLACK);
@@ -132,6 +202,11 @@ public class Graphic {
 		}
 	}
 	
+	/**
+	 * Renders the legend of symbols on top of the image.
+	 * 
+	 * @param g The {@link Graphics2D} instance that performs the render.
+	 */
 	public static void drawLegend(Graphics2D g) {
 		AffineTransform state = g.getTransform();
 		String[][] labels = {
@@ -163,6 +238,12 @@ public class Graphic {
 		g.setTransform(state);
 	}
 	
+	/**
+	 * Renders the header of the output image, with all overall information.
+	 * 
+	 * @param g The {@link Graphics2D} instance that performs the render.
+	 * @param model {@link Model} instance containing data.
+	 */
 	public static void drawHeader(Graphics2D g, Model model) {
 		AffineTransform state = g.getTransform();
 		g.setFont(new Font("TimesRoman", Font.PLAIN, 16));
@@ -178,6 +259,13 @@ public class Graphic {
 		g.setTransform(state);
 	}
 	
+	/**
+	 * Renders the passed instance of {@link Solution}.
+	 * 
+	 * @param g The {@link Graphics2D} instance that performs the render.
+	 * @param model {@link Model} instance containing data.
+	 * @param solution {@link Solution} instance to render.
+	 */
 	public static void drawSolution(Graphics2D g, Model model, Solution solution) {
 		double[] contributions = Solution.contributions(model, solution); 
 		AffineTransform state = g.getTransform();
@@ -192,6 +280,14 @@ public class Graphic {
 		g.setTransform(state);
 	}
 	
+	/**
+	 * Renders the subnetwork of the passed instance of {@link Solution}.
+	 * 
+	 * @param g The {@link Graphics2D} instance that performs the render.
+	 * @param model {@link Model} instance containing data.
+	 * @param solution {@link Solution} instance to render.
+	 * @param contributions the array with the contribution of every node to the score of the subnetwork.
+	 */
 	public static void drawNetwork(Graphics2D g, Model model, Solution solution, double[] contributions) {
 		AffineTransform state = g.getTransform();
 		int[] x = new int[solution.vertices.size()];
@@ -222,6 +318,12 @@ public class Graphic {
 		g.setTransform(state);
 	}
 	
+	/**
+	 * Returns a color depending on the contribution of the node to the score of the subnetwork. Returns white if zero.
+	 * 
+	 * @param contribution the contribution of the node to the score of the subnetwork.
+	 * @return the instance of {@link Color} to be colored
+	 */
 	public static Color vertexColor(double contribution) {
 		if(contribution > 0.0) {
 			return POSITIVE_COLOR;
@@ -231,6 +333,13 @@ public class Graphic {
 		return Color.WHITE;
 	}
 	
+	/**
+	 * Looks for a vertex and returns its index within the passed instance of {@link Solution}.
+	 * 
+	 * @param solution {@link Solution} instance.
+	 * @param v {@link Vertex} instance to look for.
+	 * @return index of the vertex in the solution.
+	 */
 	public static int getIndex(Solution solution, Vertex v) {
 		for(int i=0; i<solution.vertices.size(); i++) {
 			if(solution.vertices.get(i) == v) {
@@ -240,6 +349,14 @@ public class Graphic {
 		return -1;
 	}
 	
+	/**
+	 * Renders the labels of the nodes of the subnetwork of an instance of {@link Solution}.
+	 * 
+	 * @param g The {@link Graphics2D} instance that performs the render.
+	 * @param model {@link Model} instance containing data.
+	 * @param solution {@link Solution} instance to render.
+	 * @param contributions the array with the contribution of every node to the score of the subnetwork.
+	 */
 	public static void drawLabels(Graphics2D g, Model model, Solution solution, double[] contributions) {
 		AffineTransform state = g.getTransform();
 		FontMetrics metrics = g.getFontMetrics(g.getFont());
@@ -255,7 +372,16 @@ public class Graphic {
 		g.setTransform(state);
 	}
 	
-	public static void drawLabelsCrossval(Graphics2D g, Model model, Model control, Solution solution, double[] contributions) {
+	/**
+	 * Renders the labels of the nodes of the subnetwork of an instance of {@link Solution} when using the statistical verification with the holdout approach.
+	 * 
+	 * @param g The {@link Graphics2D} instance that performs the render.
+	 * @param train {@link Model} instance containing training data.
+	 * @param control {@link Model} instance containing validation data.
+	 * @param solution {@link Solution} instance to render.
+	 * @param contributions the array with the contribution of every node to the score of the subnetwork.
+	 */
+	public static void drawLabelsCrossval(Graphics2D g, Model train, Model control, Solution solution, double[] contributions) {
 		AffineTransform state = g.getTransform();
 		FontMetrics metrics = g.getFontMetrics(g.getFont());
 		int font_height = metrics.getHeight();
@@ -264,12 +390,18 @@ public class Graphic {
 			if(i>0 && i%6 == 0) {
 				g.translate(LABEL_WIDTH, -6*font_height);
 			}
-			g.drawString("("+(i+1)+") "+model.genes[solution.vertices.get(i).id].symbol+"  "+contributions[i]+" ntr:"+model.genes[solution.vertices.get(i).id].m1+" nctrl:"+Graph.getVertexBySymbol(control, solution.vertices.get(i).gene.symbol).gene.m1, 0, 0);
+			g.drawString("("+(i+1)+") "+train.genes[solution.vertices.get(i).id].symbol+"  "+contributions[i]+" ntr:"+train.genes[solution.vertices.get(i).id].m1+" nctrl:"+Graph.getVertexBySymbol(control, solution.vertices.get(i).gene.symbol).gene.m1, 0, 0);
 			g.translate(0, font_height);
 		}
 		g.setTransform(state);
 	}
 	
+	/**
+	 * Renders statistical summary of the passed instance of {@link Solution}.
+	 * 
+	 * @param g The {@link Graphics2D} instance that performs the render.
+	 * @param solution {@link Solution} instance to render.
+	 */
 	public static void drawSummary(Graphics2D g, Solution solution) {
 		AffineTransform state = g.getTransform();
 		FontMetrics metrics = g.getFontMetrics(g.getFont());
@@ -283,6 +415,13 @@ public class Graphic {
 		g.setTransform(state);
 	}
 	
+	/**
+	 * Renders the mutation matrix evidencing mutations in the passed instance of {@link Solution}.
+	 * 
+	 * @param g The {@link Graphics2D} instance that performs the render.
+	 * @param model {@link Model} instance containing data.
+	 * @param solution {@link Solution} instance to render.
+	 */
 	public static void drawMatrix(Graphics2D g, Model model, Solution solution) {
 		AffineTransform state = g.getTransform();
 		for(int i=0; i<solution.vertices.size(); i++) {
@@ -304,6 +443,13 @@ public class Graphic {
 		g.setTransform(state);
 	}
 	
+	/** 
+	 * Renders the mutation matrix evidencing mutations in the passed instance of {@link Solution} when using the statistical verification with the holdout approach.
+	 * 
+	 * @param g The {@link Graphics2D} instance that performs the render.
+	 * @param model {@link Model} instance containing the mutation matrix.
+	 * @param solution {@link Solution} instance to render.
+	 */
 	public static void drawMatrixCrossval(Graphics2D g, Model model, Solution solution) {
 		AffineTransform state = g.getTransform();
 		for(int i=0; i<solution.vertices.size(); i++) {

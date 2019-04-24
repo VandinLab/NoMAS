@@ -1,6 +1,12 @@
 package NoMAS;
 import java.util.*;
 
+/**
+ * @author Federico Altieri
+ * @author Tommy V. Hansen
+ * @author Fabio Vandin
+ *
+ */
 public class Greedy1 extends AbstractGreedy {
 	
 	public Greedy1(Model model , Configuration config) {

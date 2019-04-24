@@ -30,15 +30,15 @@ public abstract class AbstractNoMAS implements Algorithm {
 
 	private int iterations_performed;
 	/**
-	 * array that stores (if filled), at colorset_to_row[i] the index of row_to_colorset relative to the combinations of colors represented by the bitstring i.
+	 * Array that stores (if filled), at colorset_to_row[i] the index of row_to_colorset relative to the combinations of colors represented by the bitstring i.
 	 */
 	public int[] colorset_to_row; 
 	/**
-	 * array that stores, at row_to_colorset[i], a combination of colors.
+	 * Array that stores, at row_to_colorset[i], a combination of colors.
 	 */
 	public int[] row_to_colorset;
 	/**
-	 * array that stores, at colorset_groups[i] the number of combinations of at most i colors in a sequence of colors drafted randomly.
+	 * Array that stores, at colorset_groups[i] the number of combinations of at most i colors in a sequence of colors drafted randomly.
 	 */
 	public int[] colorset_groups;
 	/**
@@ -46,7 +46,7 @@ public abstract class AbstractNoMAS implements Algorithm {
 	 */
 	public long start_time;
 	/**
-	 * elapsed time in elaboration since start_time. Similar to wall-clock time.
+	 * Elapsed time in elaboration since start_time. Similar to wall-clock time.
 	 */
 	public double time_elapsed;
 	/**

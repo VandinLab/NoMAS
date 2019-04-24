@@ -2,12 +2,20 @@ package NoMAS;
 import java.util.*;
 import java.io.*;
 
+/**
+ * Class that loads the the main network and performs basic operations. All methods are static 
+ * 
+ * @author Federico Altieri
+ * @author Tommy V. Hansen
+ * @author Fabio Vandin
+ *
+ */
 public class Graph {
 	/**
-	 * Constructs a graph in the given model.
+	 * Constructs a graph in the given {@link Model} instance.
 	 *
-	 * @param filename File containing the graph data
-	 * @param model The model to contain the graph
+	 * @param filename {@link String} containing path of the graph data file
+	 * @param model The {@link Model} to contain the graph
 	 */
 	public static void loadGraph(String filename, Model model) {		
 		BufferedReader reader = Utils.bufferedReader(filename);
@@ -43,7 +51,7 @@ public class Graph {
 	/**
 	 * Reduces the size of the given graph by removing vertices.
 	 *
-	 * @param model The model containing the graph to be reduced
+	 * @param model The {@link Model} containing the graph to be reduced
 	 * @param conditions Conditions for a vertex to remain in the graph
 	 */
 	public static void reduce(Model model, int conditions) {
@@ -88,7 +96,7 @@ public class Graph {
 	 *
 	 * @param seed The seed to use for the random selection of colors
 	 * @param k The number of different colors to choose from
-	 * @param model The model containing the graph to be colored 
+	 * @param model The {@link Model} containing the graph to be colored 
 	 */
 	public static void color(int seed, int k, Model model) {
 		Random rng = new Random(seed);
@@ -97,6 +105,13 @@ public class Graph {
 		}
 	}
 	
+	/**
+	 * Given a list of {@link Vertex} instances, determines if this set is colorful (i.e. each {@link Vertex} has a different color) 
+	 * 
+	 * @param vertices {@link ArrayList} of {@link Vertex} instances to analyze
+	 * @param d the number of colors
+	 * @return true if the set is colorful
+	 */
 	public static boolean isColorful(ArrayList<Vertex> vertices, int d) {
 		boolean[] seen = new boolean[d];
 		for(Vertex v : vertices) {
@@ -109,6 +124,13 @@ public class Graph {
 		
 	}
 	
+	/**
+	 * Computes the minimum distances of all nodes in the network from a node in the sources set 
+	 * 
+	 * @param model The {@link Model} that stores information about data
+	 * @param sources {@link ArrayList} of {@link Vertex} instances using as sources of the paths
+	 * @return an array of integers containing the minimum distances to each node starting from a note in the sources set 
+	 */
 	public static int[] shortestPaths(Model model, ArrayList<Vertex> sources) {
 		boolean[] visited = new boolean[model.n];
 		int[] dist = new int[model.n];
@@ -132,6 +154,14 @@ public class Graph {
 		return dist;
 	}
 	
+	/**
+	 * Picks a random connected subgraph from the current network stored in the passed {@link Model} instance.
+	 * 
+	 * @param model {@link Model} containing input data.
+	 * @param rng {@link Random} instance that performs random numbers extraction.
+	 * @param k Size of the subgraph to pick.
+	 * @return The subgraph extracted in form of an {@link ArrayList} of {@link Vertex} instances.
+	 */
 	public static ArrayList<Vertex> randomSubgraph(Model model, Random rng, int k) {
 		int iterations = 0;
 		ArrayList<Vertex> S = new ArrayList<Vertex>();
@@ -152,6 +182,13 @@ public class Graph {
 		return S;
 	}
 	
+	/**
+	 * Determines how many nodes two subgraphs share
+	 * 
+	 * @param A A subgraph in form of an {@link ArrayList} of {@link Vertex} instances.
+	 * @param B Another subgraph in form of an {@link ArrayList} of {@link Vertex} instances. 
+	 * @return the number of shared nodes
+	 */
 	public static int overlap(ArrayList<Vertex> A, ArrayList<Vertex> B) {
 		int overlap = 0;
 		for(Vertex a : A) {
@@ -165,6 +202,12 @@ public class Graph {
 		return overlap;
 	}
 	
+	/**
+	 * Prints the information on the graph using the {@link Output} instance contained in the passed {@link Model} instance.
+	 * 
+	 * @param model {@link Model} instance with data.
+	 * @param prefix A fixed prefix to print at the beginning of each line.
+	 */
 	public static void printInformation(Model model, String prefix) {
 		model.log.stream.println(prefix+"Condition conditions: "+model.reduction_conditions);
 		model.log.stream.println(prefix+"Number of vertices: "+model.n);
@@ -176,6 +219,12 @@ public class Graph {
 		model.log.stream.flush();
 	}
 	
+	/**
+	 * Counts the edges of a network.
+	 * 
+	 * @param model {@link Model} instance with data.
+	 * @return the number of edges.
+	 */
 	public static int numberOfEdges(Model model) {
 		int edges = 0;
 		for(Vertex v : model.vertices) {
@@ -184,6 +233,12 @@ public class Graph {
 		return edges/2;
 	}
 	
+	/**
+	 * Counts the isolated nodes of the network (i.e. nodes without neighbors).
+	 * 
+	 * @param model {@link Model} instance with data.
+	 * @return the number of isolated nodes.
+	 */
 	public static int numberOfIsolated(Model model) {
 		int isolated = 0;
 		for(Vertex v : model.vertices) {
@@ -194,6 +249,13 @@ public class Graph {
 		return isolated;
 	}
 	
+	/**
+	 * Returns, if present, the instance of {@link Vertex} corresponding to the gene with symbol in input.
+	 * 
+	 * @param model {@link Model} instance with data.
+	 * @param symbol The symbol of the gene to look for.
+	 * @return The corresponding instance of {@link Vertex} if present, null elsewhere.
+	 */
 	public static Vertex getVertexBySymbol(Model model, String symbol) {
 		for(Vertex v : model.vertices) {
 			if(v.gene.symbol.equals(symbol)) {
@@ -203,6 +265,12 @@ public class Graph {
 		return null;
 	}
 	
+	/**
+	 * Returns the maximum degree present in the network.
+	 * 
+	 * @param model {@link Model} instance with data.
+	 * @return the maximum degree.
+	 */
 	public static int largestDegree(Model model) {
 		int largest = 0;
 		for(Vertex v : model.vertices) {
@@ -213,6 +281,12 @@ public class Graph {
 		return largest;
 	}
 	
+	/**
+	 * Returns an array with the size of the connected components of the graph. At a certain index, the array stores the number of other nodes reachable from the corresponding node. 
+	 * 
+	 * @param model {@link Model} instance with data.
+	 * @return an array of integers with the size of corresponding connected components.
+	 */
 	public static int[] connectedComponents(Model model) {
 		boolean[] added = new boolean[model.n];
 		int[] component = new int[model.n];

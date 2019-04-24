@@ -2,7 +2,7 @@ package NoMAS;
 import java.util.*;
 
 /**
- * Test class
+ * Test class used for customized runs
  * 
  * @author Federico Altieri
  * @author Tommy V. Hansen
