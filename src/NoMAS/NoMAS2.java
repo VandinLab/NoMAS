@@ -1,19 +1,42 @@
 package NoMAS;
 import java.util.*;
 
+/**
+ * Implementation of neighborhood modification of NoMAS Additive (check {@link https://doi.org/10.3389/fgene.2019.00265} for description)
+ * 
+ * @author Federico Altieri
+ * @author Tommy V. Hansen
+ * @author Fabio Vandin
+ *
+ */
 public class NoMAS2 extends AbstractNoMAS {
-	public boolean[][] included_arrays;
+	/**
+	 * array of booleans for neighbors tracking
+	 */
+	private boolean[][] included_arrays;
 	
+	/**
+	 * Constructor that receives input data ({@link Model} instance and configuration parameters ({@link Configuration} instance)
+	 * 
+	 * @param model Instance of {@link Model} containing input data.
+	 * @param config Instance of {@link Configuration} containing algorithm parameters and system configuration.
+	 */
 	public NoMAS2(Model model, Configuration config) {
 		super(model, config);
 	}
 	
+	/**
+	 *{@inheritDoc}
+	 */
 	@Override
 	public void initialize() {
 		super.initialize();
 		included_arrays = new boolean[config.N][model.n];
 	}
 
+	/**
+	 *{@inheritDoc}
+	 */
 	public Solution computeEntry(Vertex v, int T, int last, int p) {
 		Solution best = null;
 		for(int rowQ=last; rowQ>=0; rowQ--) {

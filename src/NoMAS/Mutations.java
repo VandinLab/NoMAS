@@ -2,10 +2,21 @@ package NoMAS;
 import java.util.*;
 import java.io.*;
 
+/**
+ * A container of static methods for mutation matrixes creation and manipulation.
+ * 
+ * @author Federico Altieri
+ * @author Tommy V. Hansen
+ * @author Fabio Vandin
+ *
+ */
 public class Mutations {
 	
 	/**
-	 * Constructs mutation matrix and censoring information.
+	 * Constructs mutation matrix and censoring information array.
+	 *
+	 * @param filename Path to the file containing the data to load.
+	 * @param model {@link Model} instance to fill with the loaded data.
 	 */
 	public static void loadMutationMatrix(String filename, Model model) {
 		BufferedReader reader = Utils.bufferedReader(filename);
@@ -59,7 +70,16 @@ public class Mutations {
 	}
 	
 	/**
-	 * Constructs mutation matrixes and censoring informations for cross validation . Splits patients into two goups: train and control.
+	 * Constructs mutation matrixes and censoring informations, splitting patients into two groups: train and control.
+	 * It is invoked when using the holdolut approach for statistical validation.
+	 *
+	 * @param filename Path to the file containing the data to load.
+	 * @param train {@link Model} instance of the data used to extract the candidate solutions.
+	 * @param control {@link Model} instance of the data used to statistically validate solutions.
+	 * @param timesplits Flag that determines if patients have to be partitioned in groups depending of their survival time.
+	 * @param splits Number of groups to split the patients into.
+	 * @param proportion For each group of patients, determines the proportion (0 = none, 1 = all) of patients to use in training group.
+	 * @param seed Seed to initialize {@link Random} objects that perform randomization.
 	 */
 	public static void loadMutationMatrixes(String filename, Model train, Model control, boolean timesplits, int splits, double proportion, long seed) {
 		BufferedReader reader = Utils.bufferedReader(filename);
@@ -325,7 +345,13 @@ public class Mutations {
 	}
 	
     /**
-	 * Constructs mutation matrix and censoring information based on an existing one, and scales the number of patiens
+	 * Reads a {@link Model} instance passed as parameter and constructs a random mutation matrix and a random censoring information array that maintain the same network, the same reduction conditions and the same censoring ratio.
+	 * The number of patients is then scaled to maintain all proportions.
+	 *
+	 * @param rng {@link Random} instance that performs the random extractions.
+	 * @param model_ref {@link Model} instance to use as source of the information to maintain 
+	 * @param m The number of patients that the new {@link Model} instance will have.
+	 * @return The new {@link Model} instance created. 
 	 */
 	public static Model getSimulatedData(Random rng, Model model_ref, int m) {
 		Model model = new Model();
@@ -348,6 +374,12 @@ public class Mutations {
 		return model;
 	}
 	
+	/**
+	 * Clears mutations of genes to be ignored for some reason. Genes to ignore are written in a file. 
+	 * 
+	 * @param model {@link Model} instance to clean.
+	 * @param filename Path to the file containing the genes to be cleared
+	 */
 	public static void removeMutationsInGenes(Model model, String filename) {
 		BufferedReader file = Utils.bufferedReader(filename);
 		String line = null;
@@ -363,7 +395,10 @@ public class Mutations {
 	}
 	
     /**
-	 * Removes mutations found in genes that are mutated in < threshold patients
+	 * Removes mutations found in genes that are mutated in a less than the threshold patients quantity.
+	 *
+	 * @param model {@link Model} instance to clean.
+	 * @param threshold Threshold, expressed as number of patients.
 	 */
 	public static void removeMutations(Model model, double threshold) {
 		for(Gene g : model.genes) {
@@ -377,6 +412,12 @@ public class Mutations {
 		printInformation(model, "\t");
 	}
 	
+	/**
+	 * Counts the number of mutations in patients data.
+	 * 
+	 * @param model {@link Model} instance with data.
+	 * @return the number of mutations
+	 */
 	public static int numberOfMutations(Model model) {
 		int count = 0;
 		for(Gene g : model.genes) {
@@ -385,6 +426,12 @@ public class Mutations {
 		return count;
 	}
 	
+	/**
+	 * Counts the number of uncensored patients.
+	 * 
+	 * @param model {@link Model} instance with data.
+	 * @return the number of uncensored patients
+	 */
 	public static int numberOfUncensored(Model model) {
 		int uncensored = 0;
 		for(int i : model.c) {
@@ -393,6 +440,12 @@ public class Mutations {
 		return uncensored;
 	}
 	
+	/**
+	 * Counts the genes that present at least a mutation in patients data.
+	 * 
+	 * @param model {@link Model} instance with data.
+	 * @return the number of genes with at least a mutation in patients.
+	 */
 	public static int numberOfMutatedGenes(Model model) {
 		int mutated = 0;
 		for(Gene g : model.genes) {
@@ -403,6 +456,12 @@ public class Mutations {
 		return mutated;
 	}
 	
+	/**
+	 * Prints some informations about the data in the log file: number of patients, uncensored ratio, number of mutations and number of mutated genes.
+	 * 
+	 * @param model {@link Model} instance with data.
+	 * @param prefix
+	 */
 	public static void printInformation(Model model, String prefix) {
 		model.log.stream.println(prefix+"Number of patients: "+model.m);
 		model.log.stream.println(prefix+"Uncensored ratio: "+Utils.round(numberOfUncensored(model)/(double)model.m, 2));
@@ -411,6 +470,10 @@ public class Mutations {
 		model.log.stream.flush();
 	}
 	
+	/**
+	 * @param model {@link Model} instance with data.
+	 * @param prefix
+	 */
 	public static void printCtrlInformation(Model model, String prefix) {
 		model.log.stream.println(prefix+"Number of control patients: "+model.m);
 		model.log.stream.println(prefix+"Number of mutations in control patients: "+numberOfMutations(model));
@@ -418,6 +481,11 @@ public class Mutations {
 		model.log.stream.flush();
 	}
 	
+	/**
+	 * @param model {@link Model} instance with data.
+	 * @param solution {@link Solution} instance to print.
+	 * @param out {@link Output} instance that performs the file writing.
+	 */
 	public static void writeMutationInfo(Model model, Solution solution, Output out) {
 		out.stream.println("patient_id\tsurvival_time\tcensoring\tmutation_status");
 		for(int i=0; i<model.m; i++) {
@@ -433,7 +501,10 @@ public class Mutations {
 	}
 	
 	/**
-	 * Sorts the patients and re-organizes the mutation matrix and survival data based on survival time of patients (from shortest to longest)
+	 * Sorts the patients and re-organizes the mutation matrix and survival data based on survival time of patients (from shortest to longest) by creating an array of indexes.
+	 *
+	 * @param times Array of doubles containing the times to sort.
+	 * @return An array of indexes representing the new sorting of the patients. 
 	 */
 	private static int[] sorter (double[] times) {
 		
@@ -460,9 +531,12 @@ public class Mutations {
 	
 	
 	/**
-	 * private method to sort data and track indexes
-	 */
-    private static Double[][] mysort(Double[][] ar) {
+	 * Private method to sort data and track indexes.
+	 *
+     * @param ar The array to sort
+     * @return The sorted array
+     */
+    private static void mysort(Double[][] ar) {
         Arrays.sort(ar, new Comparator<Double[]>() {
             @Override
             public int compare(Double[] int1, Double[] int2) {
@@ -471,6 +545,5 @@ public class Mutations {
                 return numOfKeys1.compareTo(numOfKeys2);
             }
         });
-        return ar;
     }
 }

@@ -4,7 +4,7 @@ import java.util.concurrent.*;
 import java.io.*;
 
 /**
- * Abstract class with core elements of SNoMAS SNoMAS(0,1,2) runs NoMAS on a subnetwork of the complete gene interaction network. 
+ * Abstract class with core elements of SNoMAS. SNoMAS(0,1,2) runs NoMAS on a subnetwork of the complete gene interaction network. 
  * The subnetwork is defined by a set, S, of seed vertices, and consists of all the vertices reachable by at most edges. 
  * SNoMAS is a local search algorithm and all its solutions contain at least one of the seed vertices from S.
  * 

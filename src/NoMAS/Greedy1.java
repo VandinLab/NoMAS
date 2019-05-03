@@ -2,6 +2,8 @@ package NoMAS;
 import java.util.*;
 
 /**
+ * Implementation of a greedy strategy to solve the problem based on nodes
+ * 
  * @author Federico Altieri
  * @author Tommy V. Hansen
  * @author Fabio Vandin
@@ -9,10 +11,19 @@ import java.util.*;
  */
 public class Greedy1 extends AbstractGreedy {
 	
+	/**
+	 * Constructor with model and configuration.
+	 *  
+	 * @param model {@link Model} with input data.
+	 * @param config {@link Configuration} with algorithm configuration.
+	 */
 	public Greedy1(Model model , Configuration config) {
 		super(model, config);
 	}
 	
+	/**
+	 *{@inheritDoc}
+	 */
 	public Solution expand(Solution solution, int k) {
 		boolean[] in_solution = new boolean[model.n];
 		boolean[] visited = new boolean[model.n];

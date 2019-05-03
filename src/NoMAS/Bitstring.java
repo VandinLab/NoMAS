@@ -43,7 +43,7 @@ public class Bitstring {
 	
 	/**
 	 * Returns the number of bits set to 1 in the given bitsets.
-	 * Uses Brian Kernighan's bits counting algorithm.
+	 * It uses Brian Kernighan's bits counting algorithm.
 	 * 
 	 * @param X the bitset to analize
 	 * @return the number of set bits in the given bitset

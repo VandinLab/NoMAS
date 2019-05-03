@@ -55,7 +55,7 @@ public abstract class AbstractNoMAS implements Algorithm {
 	public Progressbar progress;
 
 	/**
-	 * Abstract class with core elements of NoMas algorithm, presented in {@link https://doi.org/10.3389/fgene.2019.00265}
+	 * Constructor that receives input data ({@link Model} instance and configuration parameters ({@link Configuration} instance)
 	 * 
 	 * @param model instance of {@link Model} containing input data.
 	 * @param config instance of {@link Configuration} containing algorithm parameters and system configuration.

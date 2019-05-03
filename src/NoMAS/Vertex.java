@@ -1,6 +1,12 @@
 package NoMAS;
 import java.util.*;
 
+/**
+ * @author Federico Altieri
+ * @author Tommy V. Hansen
+ * @author Fabio Vandin
+ *
+ */
 public class Vertex {
 	public int id, color, degree;
 	public Gene gene;

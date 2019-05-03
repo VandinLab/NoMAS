@@ -1,5 +1,18 @@
 package NoMAS;
+/**
+ * Class with example of Main method for quick execution
+ * 
+ * @author Federico Altieri
+ * @author Tommy V. Hansen
+ * @author Fabio Vandin
+ *
+ */
 public class Main {
+	/**
+	 * Main example
+	 * 
+	 * @param args Arguments. To be filled with consecutive couples key - value. See the readme for further details.
+	 */
 	public static void main(String[] args) {
 		int index = -1;
         String import_file = null;

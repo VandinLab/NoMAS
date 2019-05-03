@@ -1,12 +1,28 @@
 package NoMAS;
-import java.util.*;
 
+/**
+ * Implementation of a greedy strategy to solve the problem based on nodes
+ * 
+ * @author Federico Altieri
+ * @author Tommy V. Hansen
+ * @author Fabio Vandin
+ *
+ */
 public class GreedyK extends AbstractGreedy {
 	
+	/**
+	 * Constructor with model and configuration.
+	 *  
+	 * @param model {@link Model} with input data.
+	 * @param config {@link Configuration} with algorithm configuration.
+	 */
 	public GreedyK(Model model , Configuration config) {
 		super(model, config);
 	}
 	
+	/**
+	 *{@inheritDoc}
+	 */
 	public Solution expand(Solution solution, int k) {
 		if(solution.vertices.size() == k) {
 			return solution;
@@ -31,7 +47,15 @@ public class GreedyK extends AbstractGreedy {
 		return expand(fixed_solution, k);	
 	}
 	
-	public Solution fix(Solution solution, Vertex last_added, int[] dist) {
+	/**
+	 * Fixes the current solution exploring the neighbors of last added vertex.
+	 * 
+	 * @param solution The current {@link Solution}instance to process.
+	 * @param last_added {@link Vertex} instance of last added node.
+	 * @param dist the distances array.
+	 * @return the fixed solution
+	 */
+	private Solution fix(Solution solution, Vertex last_added, int[] dist) {
 		if(dist[last_added.id] == 1) {
 			return solution;
 		}

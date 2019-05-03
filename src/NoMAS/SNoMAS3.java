@@ -1,19 +1,43 @@
 package NoMAS;
 import java.util.*;
 
+/**
+ * Implementation of SNoMas, heuristic 2. Same as heuristic 1, implemented in {@link SNoMAS2}, but can also combine with vertices not neighboring a seed vertex. 
+ * A bit slower than {@link SNoMAS2} but faster than {@link SNoMAS1}. Can enumerate more solutions than {@link SNoMAS2}.
+ * 
+ * @author Federico Altieri
+ * @author Tommy V. Hansen
+ * @author Fabio Vandin
+ *
+ */
 public class SNoMAS3 extends SNoMAS2 {
-	public boolean[][] included_arrays;
+	/**
+	 * array of booleans for neighbors tracking
+	 */
+	private boolean[][] included_arrays;
 	
+	/**
+	 * Constructor that receives input data ({@link Model} instance and configuration parameters ({@link Configuration} instance)
+	 * 
+	 * @param model Instance of {@link Model} containing input data.
+	 * @param config Instance of {@link Configuration} containing algorithm parameters and system configuration.
+	 */
 	public SNoMAS3(Model model, Configuration config) {
 		super(model, config);
 	}
 	
+	/**
+	 *{@inheritDoc}
+	 */
 	@Override
 	public void initialize() {
 		super.initialize();
 		included_arrays = new boolean[config.N][model.n];
 	}
 	
+	/**
+	 *{@inheritDoc}
+	 */
 	@Override
 	public Solution computeEntry(Vertex v, int T, int last, int p) {
 		// Do simple computation if v is not a seed vertex

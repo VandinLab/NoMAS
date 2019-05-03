@@ -1,10 +1,28 @@
 package NoMAS;
 
+/**
+ * NoMas implementation with the additive score variant. The score of a subnetwork is considered as the sum of the scores of itsnodes (check {@link https://doi.org/10.3389/fgene.2019.00265} for further details)
+ * 
+ * @author Federico  Altieri
+ * @author Tommy V. Hansen
+ * @author Fabio Vandin
+ *
+ */
 public class NoMASAdditive extends AbstractNoMAS {
+	
+	/**
+	 * Constructor that receives input data ({@link Model} instance and configuration parameters ({@link Configuration} instance)
+	 * 
+	 * @param model Instance of {@link Model} containing input data.
+	 * @param config Instance of {@link Configuration} containing algorithm parameters and system configuration.
+	 */
 	public NoMASAdditive(Model model, Configuration config) {
 		super(model, config);
 	}
     
+    /**
+     *{@inheritDoc}
+     */
     @Override
     public void initialize() {
            super.initialize();
@@ -16,6 +34,9 @@ public class NoMASAdditive extends AbstractNoMAS {
            }
     }
 
+	/**
+	 *{@inheritDoc}
+	 */
 	public Solution computeEntry(Vertex v, int T, int last, int p) {
 		Solution best = null;
 		for(int rowQ=last; rowQ>=0; rowQ--) {
@@ -39,12 +60,18 @@ public class NoMASAdditive extends AbstractNoMAS {
 		return best;
 	}
     
+    /**
+     *{@inheritDoc}
+     */
     @Override
     public void screenSolutions(Solution[] list) {
 		super.screenSolutions(list);
         SolutionList.computeLogrank(model, list);
 	}
 	
+	/**
+	 *{@inheritDoc}
+	 */
 	@Override
 	public Solution computeTrivialEntry(Vertex v) {
 		return new Solution(v, model.scores[v.id], model);

@@ -1,14 +1,33 @@
 package NoMAS;
 
+/**
+ * The progress bar of the algorithm execution to be displayed on screen
+ * 
+ * @author Federico Altieri
+ * @author Tommy V. Hansen
+ * @author Fabio Vandin
+ *
+ */
 public class Progressbar {
+	/**
+	 * On screen width of the bar
+	 */
 	int width;
 
-	//Constructor that specifies the width of the progress bar
+	/**
+	 * Constructor that specifies the width of the progress bar.
+	 *
+	 * @param w 
+	 */
 	public Progressbar(int w) {
 		width = w;
 	}
 	
-	//Update method that redraws the progress bar
+	/**
+	 * Updates and redraws the progress bar
+	 * 
+	 * @param progressPercentage Percentage of the progress to display.
+	 */
 	public void update(double progressPercentage) {
 		//The percentage string that is placed in the middle
 		String percentage = " " + (int)(progressPercentage*100) + "% ";
@@ -56,6 +75,9 @@ public class Progressbar {
 		System.err.print("]");
 	}
 	
+	/**
+	 * Closes the progress bar.
+	 */
 	public void finish() {
 		System.err.print("\n");
 	}
