@@ -17,7 +17,7 @@ public class Progressbar {
 	/**
 	 * Constructor that specifies the width of the progress bar.
 	 *
-	 * @param w 
+	 * @param w the on screen width of the progress bar.
 	 */
 	public Progressbar(int w) {
 		width = w;

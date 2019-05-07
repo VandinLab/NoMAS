@@ -110,7 +110,7 @@ public class SolutionList {
 	 * @param size Size of the merged collection
 	 * @param objective Objective function to determine solution sorting.
 	 * @param lists Array of arrays of {@link Solution} instances to merge.
-	 * @return
+	 * @return An array of all {@link Solution} instances.
 	 */
 	public static Solution[] merge(int size, Objective objective, Solution[]... lists) {
 		Solution[] solutions = new Solution[size];

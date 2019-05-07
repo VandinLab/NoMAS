@@ -3,7 +3,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 /**
- * Abstract class with core elements of NoMas algorithm to solve the optimization problem, as described in {@link https://doi.org/10.3389/fgene.2019.00265}  
+ * Abstract class with core elements of NoMas algorithm to solve the optimization problem, as described in <a href="https://doi.org/10.3389/fgene.2019.00265">NoMAS: A Computational Approach to Find Mutated Subnetworks Associated With Survival in Genome-Wide Cancer Studies</a>.
  * 
  * @author Federico Altieri
  * @author Tommy V. Hansen
@@ -124,7 +124,7 @@ public abstract class AbstractNoMAS implements Algorithm {
 	 * Performs a single color coding iteration and computes the table of solutions relative to the picked configuration, collecting the best solutions.
 	 * 
 	 * @param rng The {@link Random} random number generator to use
-	 * @list The list into which the best solutions are inserted as an array of {@link Solution}
+	 * @param list The list into which the best solutions are inserted as an array of {@link Solution}
 	 */
 	public void iterate(Random rng, Solution[] list) {
 		Graph.color(rng.nextInt(), config.colors, model);

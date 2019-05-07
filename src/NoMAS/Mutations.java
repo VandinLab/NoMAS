@@ -460,7 +460,7 @@ public class Mutations {
 	 * Prints some informations about the data in the log file: number of patients, uncensored ratio, number of mutations and number of mutated genes.
 	 * 
 	 * @param model {@link Model} instance with data.
-	 * @param prefix
+	 * @param prefix a prefix to place in front of the printed lines 
 	 */
 	public static void printInformation(Model model, String prefix) {
 		model.log.stream.println(prefix+"Number of patients: "+model.m);
@@ -471,8 +471,11 @@ public class Mutations {
 	}
 	
 	/**
-	 * @param model {@link Model} instance with data.
-	 * @param prefix
+	 * Prints some informations about the data in the log file about the validation group of patients: number of patients, uncensored ratio, number of mutations and number of mutated genes.
+	 * To be invoked when using the holdout approach for statistical validation
+	 * 
+	 * @param model {@link Model} instance with data about the validation set of patients.
+	 * @param prefix a prefix to place in front of the printed lines 
 	 */
 	public static void printCtrlInformation(Model model, String prefix) {
 		model.log.stream.println(prefix+"Number of control patients: "+model.m);
@@ -482,6 +485,8 @@ public class Mutations {
 	}
 	
 	/**
+	 * Writes the informations about the mutations in patients for the genes of a specific {@link Solution} instance.
+	 * 
 	 * @param model {@link Model} instance with data.
 	 * @param solution {@link Solution} instance to print.
 	 * @param out {@link Output} instance that performs the file writing.

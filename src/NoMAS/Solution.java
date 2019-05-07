@@ -2,7 +2,7 @@ package NoMAS;
 import java.util.*;
 
 /**
- * Representation of a solution (a subnetwork) to the problem of the log-rank score maximization (or minimization) presented in details in {@link https://doi.org/10.3389/fgene.2019.00265}.
+ * Representation of a solution (a subnetwork) to the problem of the log-rank score maximization (or minimization) presented in details in <a href="https://doi.org/10.3389/fgene.2019.00265">NoMAS: A Computational Approach to Find Mutated Subnetworks Associated With Survival in Genome-Wide Cancer Studies</a>.
  * 
  * @author Federico Altieri
  * @author Tommy V. Hansen
@@ -133,10 +133,10 @@ public class Solution{
 	}
 	
 	/**
-	 * Prints the summary statistics of the current solution.
+	 * Prepares a {@link String} instance with the summary statistics of the current solution.
 	 * 
 	 * @param model Instance of {@link Model} containing input data.
-	 * @return
+	 * @return The summary of the statistics.
 	 */
 	public String asString(Model model) {
 		String s = m1+"\t"+lr+"\t"+nlr+"\t"+pv+"\t"+ppv+"\t"+score+"\t#";
@@ -199,7 +199,7 @@ public class Solution{
 	 * 
 	 * @param a The first {@link Solution} instance to compare.
 	 * @param b The second {@link Solution} instance to compare.
-	 * @return
+	 * @return true if the {@link Solution} instances identical, false elsewhere.
 	 */
 	public static boolean isEqual(Solution a, Solution b) {
 		if(a.vertices.size() != b.vertices.size()) {

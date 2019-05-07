@@ -2,7 +2,9 @@ package NoMAS;
 
 /**
  * 
- * Abstract class with core elements of a Greedy strategy to solve the optimization problem presented in {@link https://doi.org/10.3389/fgene.2019.00265}
+ * Abstract class with core elements of a Greedy strategy to solve the optimization problem presented in 
+ * <a href="https://doi.org/10.3389/fgene.2019.00265">NoMAS: A Computational Approach to Find Mutated Subnetworks Associated With Survival in Genome-Wide Cancer Studies</a>.
+
  * 
  * @author Federico Altieri
  * @author Tommy V. Hansen

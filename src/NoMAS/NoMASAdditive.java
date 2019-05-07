@@ -1,7 +1,7 @@
 package NoMAS;
 
 /**
- * NoMas implementation with the additive score variant. The score of a subnetwork is considered as the sum of the scores of itsnodes (check {@link https://doi.org/10.3389/fgene.2019.00265} for further details)
+ * NoMas implementation with the additive score variant. The score of a subnetwork is considered as the sum of the scores of itsnodes (check <a href="https://doi.org/10.3389/fgene.2019.00265">NoMAS: A Computational Approach to Find Mutated Subnetworks Associated With Survival in Genome-Wide Cancer Studies</a> for further details)
  * 
  * @author Federico  Altieri
  * @author Tommy V. Hansen

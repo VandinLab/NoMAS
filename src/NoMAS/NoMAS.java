@@ -1,7 +1,7 @@
 package NoMAS;
 
 /**
- * Standard implementation of NoMas Algorithm (check {@link https://doi.org/10.3389/fgene.2019.00265} for description)
+ * Standard implementation of NoMas Algorithm (check <a href="https://doi.org/10.3389/fgene.2019.00265">NoMAS: A Computational Approach to Find Mutated Subnetworks Associated With Survival in Genome-Wide Cancer Studies</a>for description)
  * 
  * @author Federico  Altieri
  * @author Tommy V. Hansen
